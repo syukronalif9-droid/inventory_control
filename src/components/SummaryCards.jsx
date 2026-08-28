@@ -30,49 +30,66 @@ export default function SummaryCards({ data }) {
     return { invSudahGRCount, invBelumGRCount, expSudahGRCount, expBelumGRCount };
   }, [data]);
 
+  const CardRow = ({ label, value, isGold }) => (
+    <div style={{
+      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      background: isGold ? 'rgba(245, 200, 66, 0.07)' : 'rgba(91, 45, 142, 0.12)',
+      padding: '0.75rem 1rem',
+      border: isGold ? '2px solid #F5C842' : '2px solid #5B2D8E',
+      boxShadow: isGold ? '3px 3px 0 #000' : '3px 3px 0 #000',
+      marginBottom: '0.6rem',
+    }}>
+      <span style={{
+        fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase',
+        letterSpacing: '0.08em',
+        color: isGold ? '#F5C842' : '#7A40B5',
+      }}>
+        {label}
+      </span>
+      <strong style={{
+        fontSize: '2rem', fontWeight: 800, lineHeight: 1,
+        color: isGold ? '#F5C842' : '#7A40B5',
+        textShadow: isGold ? '2px 2px 0 rgba(0,0,0,0.6)' : '2px 2px 0 rgba(0,0,0,0.6)',
+      }}>
+        {value.toLocaleString('id-ID')}
+      </strong>
+    </div>
+  );
+
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
       
-      <div className="glass-card" style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', background: 'var(--brand-purple)', filter: 'blur(60px)', opacity: 0.15, borderRadius: '50%' }}></div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 2 }}>
+      {/* INVENTARIS Card */}
+      <div className="glass-card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div>
-            <h3 style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Inventory</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <span style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>
-                  Sudah GR: <strong style={{color: 'var(--status-success)', fontSize: '1.75rem', marginLeft: '0.5rem'}}>{stats.invSudahGRCount.toLocaleString('id-ID')}</strong>
-                </span>
-                <span style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>
-                  Belum GR: <strong style={{color: 'var(--status-warning)', fontSize: '1.75rem', marginLeft: '0.5rem'}}>{stats.invBelumGRCount.toLocaleString('id-ID')}</strong>
-                </span>
-            </div>
+            <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
+            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>INVENTARIS</h3>
           </div>
-          <div className="icon-container" style={{ background: 'rgba(30, 58, 95, 0.1)', color: 'var(--brand-purple)', width: '64px', height: '64px' }}>
-            <Box size={32} strokeWidth={2.5} />
+          <div className="icon-container" style={{ background: 'rgba(245, 200, 66, 0.1)', color: '#F5C842' }}>
+            <Box size={24} strokeWidth={2.5} />
           </div>
         </div>
+        <CardRow label="Sudah GR" value={stats.invSudahGRCount} isGold={true} />
+        <CardRow label="Belum GR" value={stats.invBelumGRCount} isGold={false} />
       </div>
       
-      <div className="glass-card" style={{ position: 'relative' }}>
-        <div style={{ position: 'absolute', top: '-30px', right: '-30px', width: '100px', height: '100px', background: 'var(--brand-blue)', filter: 'blur(60px)', opacity: 0.15, borderRadius: '50%' }}></div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 2 }}>
+      {/* EXPENSE Card */}
+      <div className="glass-card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div>
-            <h3 style={{ color: 'var(--text-secondary)', fontSize: '1.2rem', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '1rem' }}>Expense (OB)</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <span style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>
-                  Sudah GR: <strong style={{color: 'var(--status-success)', fontSize: '1.75rem', marginLeft: '0.5rem'}}>{stats.expSudahGRCount.toLocaleString('id-ID')}</strong>
-                </span>
-                <span style={{ fontSize: '1.1rem', color: 'var(--text-primary)' }}>
-                  Belum GR: <strong style={{color: 'var(--status-warning)', fontSize: '1.75rem', marginLeft: '0.5rem'}}>{stats.expBelumGRCount.toLocaleString('id-ID')}</strong>
-                </span>
-            </div>
+            <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
+            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>EXPENSE (OB)</h3>
           </div>
-          <div className="icon-container" style={{ background: 'rgba(37, 99, 235, 0.1)', color: 'var(--brand-blue)', width: '64px', height: '64px' }}>
-            <DollarSign size={32} strokeWidth={2.5} />
+          <div className="icon-container" style={{ background: 'rgba(91, 45, 142, 0.15)', color: '#7A40B5' }}>
+            <DollarSign size={24} strokeWidth={2.5} />
           </div>
         </div>
+        <CardRow label="Sudah GR" value={stats.expSudahGRCount} isGold={true} />
+        <CardRow label="Belum GR" value={stats.expBelumGRCount} isGold={false} />
       </div>
 
     </div>
   );
 }
+

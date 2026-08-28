@@ -69,8 +69,8 @@ const CustomDateInput = ({ value, onChange, title }) => {
   };
 
   return (
-    <div style={{ position: 'relative', minWidth: '150px', height: '36px', display: 'flex', alignItems: 'center', background: '#FFFFFF', borderRadius: '6px', border: '1px solid var(--border-light)' }}>
-      <div style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: value ? 'var(--text-primary)' : 'var(--text-secondary)', pointerEvents: 'none', fontWeight: 500, fontSize: '0.95rem', whiteSpace: 'nowrap' }}>
+    <div style={{ position: 'relative', minWidth: '140px', height: '36px', display: 'flex', alignItems: 'center', background: 'var(--bg-inset)', border: '2px solid #000', boxShadow: '2px 2px 0 #000' }}>
+      <div style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: value ? 'var(--text-primary)' : 'var(--text-secondary)', pointerEvents: 'none', fontWeight: 700, fontSize: '0.85rem', whiteSpace: 'nowrap', fontFamily: 'Space Grotesk, sans-serif' }}>
         {getDisplayValue()}
       </div>
       <input
@@ -87,6 +87,7 @@ const CustomDateInput = ({ value, onChange, title }) => {
     </div>
   );
 };
+
 
 function App() {
   const [data, setData] = useState([]);
@@ -435,7 +436,7 @@ function App() {
     return (
       <div className="loader-container">
         <div className="spinner"></div>
-        <p>Loading dataset...</p>
+        <p>Memuat data...</p>
       </div>
     );
   }
@@ -451,24 +452,27 @@ function App() {
 
   return (
     <div className="app-container">
-      <header className="app-header">
-        <div>
-          <h1 className="app-title text-gradient" style={{ marginBottom: '0.25rem' }}>TMR Monitoring Dashboard</h1>
+      <header className="app-header" style={{ marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+          <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
+          <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', border: '2px solid #222', padding: '0.3rem 0.75rem', boxShadow: '2px 2px 0 #000' }}>
+            Live Data
+          </div>
         </div>
         
-        <div className="controls-bar" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
+        <div className="controls-bar" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
           
           {/* Filters (Left Side) */}
-          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', flex: 1 }}>
-            {/* GR Date Range Filter */}
-                        <div className="input-group date-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Calendar size={16} style={{ color: 'var(--text-secondary)' }} />
+          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', flex: 1, alignItems: 'center' }}>
+            {/* Date Range Filter */}
+            <div className="input-group date-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Calendar size={14} style={{ color: 'var(--gold)', flexShrink: 0 }} />
               <CustomDateInput
                 value={startDate}
                 onChange={setStartDate}
                 title="Start Shipping Date"
               />
-              <span style={{ color: 'var(--text-secondary)' }}>-</span>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>—</span>
               <CustomDateInput
                 value={endDate}
                 onChange={setEndDate}
@@ -481,7 +485,6 @@ function App() {
               value={statusGrFilter} 
               onChange={e => setStatusGrFilter(e.target.value)}
               className="input-group"
-              style={{ background: '#F5F7FA', color: 'var(--text-primary)', border: '1px solid var(--border-light)', borderRadius: '8px', padding: '0.4rem', outline: 'none' }}
             >
               <option value="">Status GR</option>
               <option value="SUDAH GR">Sudah GR</option>
@@ -493,7 +496,6 @@ function App() {
               value={statusFilter} 
               onChange={e => setStatusFilter(e.target.value)}
               className="input-group"
-              style={{ background: '#F5F7FA', color: 'var(--text-primary)', border: '1px solid var(--border-light)', borderRadius: '8px', padding: '0.4rem', outline: 'none' }}
             >
               <option value="">Status TMR</option>
               {statusOptions.map(opt => (
@@ -506,20 +508,20 @@ function App() {
               value={matlGroupFilter} 
               onChange={e => setMatlGroupFilter(e.target.value)}
               className="input-group"
-              style={{ background: '#F5F7FA', color: 'var(--text-primary)', border: '1px solid var(--border-light)', borderRadius: '8px', padding: '0.4rem', outline: 'none' }}
             >
-              <option value="">Matl Group</option>
+              <option value="">Grup Mati</option>
               <option value="Inventory">Inventory</option>
               <option value="Expense">Expense (OB)</option>
             </select>
 
+            {/* Destination Filter */}
             <select 
               value={destinationFilter} 
               onChange={e => setDestinationFilter(e.target.value)}
               className="input-group"
-              style={{ background: '#F5F7FA', color: 'var(--text-primary)', border: '1px solid var(--border-light)', borderRadius: '8px', padding: '0.4rem', outline: 'none', maxWidth: '200px' }}
+              style={{ maxWidth: '200px' }}
             >
-              <option value="">Destination</option>
+              <option value="">Tujuan</option>
               {destinationOptions.map(opt => (
                 <option key={opt} value={opt}>{opt}</option>
               ))}
@@ -529,16 +531,16 @@ function App() {
               <button 
                 onClick={() => { setStartDate(''); setEndDate(''); setStatusFilter(''); setMatlGroupFilter(''); setStatusGrFilter(''); setDestinationFilter(''); }}
                 className="icon-button danger"
-                title="Clear Filters"
+                title="Hapus Filter"
                 style={{ padding: '0.4rem' }}
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             )}
           </div>
 
-          {/* Action Buttons (Right Side, Blue, Spaced Away) */}
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
+          {/* Action Buttons (Right Side) */}
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
             <input 
               type="file" 
               accept=".xlsx, .xls, .csv" 
@@ -547,21 +549,19 @@ function App() {
               onChange={handleFileUpload}
             />
             <button 
-              className="btn"
-              style={{ background: 'var(--brand-blue)', color: '#fff', border: 'none' }}
+              className="btn btn-upload"
               onClick={() => fileInputRef.current?.click()}
             >
-              <UploadCloud size={18} />
-              <span>Upload Data</span>
+              <UploadCloud size={16} />
+              <span>Unggah Data</span>
             </button>
 
             <button 
-              className="btn"
-              style={{ background: 'var(--brand-blue)', color: '#fff', border: 'none' }}
+              className="btn btn-reset"
               onClick={handleResetData}
               title="Hapus Semua Data"
             >
-              <Trash2 size={18} />
+              <Trash2 size={16} />
               <span>Reset</span>
             </button>
           </div>

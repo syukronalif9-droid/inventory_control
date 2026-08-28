@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { ClipboardCheck } from 'lucide-react';
 
-const COLORS = ['#ef4444', '#10b981']; // Red for Late, Green for Ontime
+const COLORS_GR = ['#FF4444', '#F5C842']; // Red=Late, Gold=Ontime
 
 export default function GRScoreCard({ data }) {
   const stats = useMemo(() => {
@@ -11,19 +11,16 @@ export default function GRScoreCard({ data }) {
 
     data.forEach(item => {
       const status = item['Status GR 101'];
-      if (status === 'Late') {
-        lateCount += 1;
-      } else if (status === 'Ontime') {
-        ontimeCount += 1;
-      }
+      if (status === 'Late') lateCount += 1;
+      else if (status === 'Ontime') ontimeCount += 1;
     });
 
     return { lateCount, ontimeCount };
   }, [data]);
 
   const chartData = [
-    { name: 'Late', value: stats.lateCount },
-    { name: 'Ontime', value: stats.ontimeCount }
+    { name: 'Terlambat (>2 jam)', value: stats.lateCount },
+    { name: 'Tepat Waktu (≤2 jam)', value: stats.ontimeCount }
   ];
 
   const totalScored = stats.lateCount + stats.ontimeCount;
@@ -31,36 +28,41 @@ export default function GRScoreCard({ data }) {
   const ontimePercent = totalScored > 0 ? ((stats.ontimeCount / totalScored) * 100).toFixed(0) + '%' : '0%';
 
   return (
-    <div className="glass-card" style={{ position: 'relative', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem', padding: '1.25rem', height: '100%', boxSizing: 'border-box' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <div className="icon-container" style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--status-success)', width: '40px', height: '40px' }}>
+    <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', height: '100%', boxSizing: 'border-box' }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', borderBottom: '2px solid #000', paddingBottom: '1rem' }}>
+        <div className="icon-container" style={{ background: 'rgba(245, 200, 66, 0.12)', color: '#F5C842' }}>
           <ClipboardCheck size={20} />
         </div>
         <div>
-          <h3 style={{ color: 'var(--text-primary)', fontSize: '1.1rem', fontWeight: 600, margin: 0 }}>GR 101</h3>
+          <div style={{ fontSize: '0.62rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-secondary)' }}>Grafik Ketepatan</div>
+          <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 800, margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>GR 101</h3>
+        </div>
+        <div style={{ marginLeft: 'auto', background: '#1A1A1A', border: '2px solid #333', padding: '0.25rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
+          Total <span style={{ color: 'var(--gold)', fontSize: '1rem' }}>{totalScored.toLocaleString('id-ID')}</span>
         </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
-        {/* Texts */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-dark)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>Late (&gt;2h)</span>
-              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--danger)', background: 'var(--status-danger-bg)', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>{latePercent}</span>
+        {/* Stats */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,68,68,0.08)', padding: '0.65rem 0.85rem', border: '2px solid #FF4444', boxShadow: '2px 2px 0 #000' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#FF4444', letterSpacing: '0.08em' }}>Terlambat (&gt;2 jam)</span>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#FF6666' }}>{latePercent}</span>
             </div>
-            <strong style={{ color: 'var(--danger)', fontSize: '1.25rem' }}>{stats.lateCount.toLocaleString('id-ID')}</strong>
+            <strong style={{ color: '#FF4444', fontSize: '1.5rem', fontWeight: 800 }}>{stats.lateCount.toLocaleString('id-ID')}</strong>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--bg-dark)', padding: '0.75rem', borderRadius: '8px', border: '1px solid var(--border-light)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <span style={{ fontSize: '0.95rem', color: 'var(--text-secondary)' }}>Ontime (&le;2h)</span>
-              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--status-success)', background: 'var(--status-success-bg)', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>{ontimePercent}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(245,200,66,0.07)', padding: '0.65rem 0.85rem', border: '2px solid #F5C842', boxShadow: '2px 2px 0 #000' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#F5C842', letterSpacing: '0.08em' }}>Tepat Waktu (≤2 jam)</span>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#C9A520' }}>{ontimePercent}</span>
             </div>
-            <strong style={{ color: 'var(--status-success)', fontSize: '1.25rem' }}>{stats.ontimeCount.toLocaleString('id-ID')}</strong>
+            <strong style={{ color: '#F5C842', fontSize: '1.5rem', fontWeight: 800 }}>{stats.ontimeCount.toLocaleString('id-ID')}</strong>
           </div>
         </div>
 
-        {/* Chart */}
+        {/* Donut Chart */}
         <div style={{ height: '160px', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
           {totalScored > 0 ? (
             <>
@@ -70,35 +72,35 @@ export default function GRScoreCard({ data }) {
                     data={chartData}
                     cx="50%"
                     cy="50%"
-                    innerRadius={50}
+                    innerRadius={46}
                     outerRadius={65}
-                    paddingAngle={5}
+                    paddingAngle={4}
                     dataKey="value"
-                    stroke="none"
+                    strokeWidth={3}
+                    stroke="#000"
                   >
                     {chartData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${index}`} fill={COLORS_GR[index % COLORS_GR.length]} />
                     ))}
                   </Pie>
-                  <Tooltip 
+                  <Tooltip
+                    contentStyle={{ background: '#111', border: '2px solid #000', borderRadius: 0, boxShadow: '3px 3px 0 #000', fontFamily: 'Space Grotesk', fontWeight: 700 }}
+                    itemStyle={{ color: '#F0F0F0' }}
                     formatter={(value) => {
-                      const percent = totalScored > 0 ? (value / totalScored * 100).toFixed(0) : 0;
-                      return [`${percent}%`, 'Persentase'];
+                      const pct = totalScored > 0 ? (value / totalScored * 100).toFixed(0) : 0;
+                      return [`${value} (${pct}%)`, ''];
                     }}
-                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
                   />
-                  <Legend verticalAlign="bottom" height={36} iconType="circle" />
                 </PieChart>
               </ResponsiveContainer>
-              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none', marginTop: '-18px' }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Total</span>
-                <br />
-                <strong style={{ fontSize: '1.2rem', color: 'var(--text-primary)' }}>{totalScored.toLocaleString('id-ID')}</strong>
+              <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center', pointerEvents: 'none' }}>
+                <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block' }}>Total</span>
+                <strong style={{ fontSize: '1.3rem', fontWeight: 800, color: 'var(--text-primary)' }}>{totalScored.toLocaleString('id-ID')}</strong>
               </div>
             </>
           ) : (
-            <div style={{ color: 'var(--text-secondary)', textAlign: 'center' }}>
-              Tidak ada data / Status belum dihitung
+            <div style={{ color: 'var(--text-secondary)', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              Tidak ada data
             </div>
           )}
         </div>
@@ -106,3 +108,4 @@ export default function GRScoreCard({ data }) {
     </div>
   );
 }
+
