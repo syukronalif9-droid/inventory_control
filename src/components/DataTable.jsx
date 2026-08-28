@@ -112,7 +112,7 @@ export default function DataTable({ data }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Material Deskripsi {renderSortIcon('Short Text')}</div>
               </th>
               <th onClick={() => requestSort('Status Keterangan GR')} style={{ cursor: 'pointer', userSelect: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Status Keterangan {renderSortIcon('Status Keterangan GR')}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Status Keterangan GR {renderSortIcon('Status Keterangan GR')}</div>
               </th>
             </tr>
           </thead>
@@ -126,11 +126,7 @@ export default function DataTable({ data }) {
                   <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--brand-blue)', fontWeight: 500 }} title={row['Short Text']}>
                     {row['Short Text'] || '-'}
                   </td>
-                  <td>
-                    <span className={`badge ${row['Status Keterangan GR'] === 'SUDAH GR' ? 'success' : 'warning'}`}>
-                      {row['Status Keterangan GR']}
-                    </span>
-                  </td>
+                  <td>{row['Status Keterangan GR'] || '-'}</td>
                 </tr>
               ))
             ) : (
