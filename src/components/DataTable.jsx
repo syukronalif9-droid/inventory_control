@@ -108,8 +108,8 @@ export default function DataTable({ data }) {
               <th onClick={() => requestSort('GR Date TMR')} style={{ cursor: 'pointer', minWidth: '110px', userSelect: 'none' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>GR Date {renderSortIcon('GR Date TMR')}</div>
               </th>
-              <th onClick={() => requestSort('Short Text')} style={{ cursor: 'pointer', userSelect: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Material Deskripsi {renderSortIcon('Short Text')}</div>
+              <th onClick={() => requestSort('Storage Location')} style={{ cursor: 'pointer', userSelect: 'none' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Storage Location {renderSortIcon('Storage Location')}</div>
               </th>
               <th onClick={() => requestSort('Status Keterangan GR')} style={{ cursor: 'pointer', userSelect: 'none' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Status Keterangan GR {renderSortIcon('Status Keterangan GR')}</div>
@@ -123,8 +123,8 @@ export default function DataTable({ data }) {
                   <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{row['TMR Number'] || '-'}</td>
                   <td style={{ fontFamily: 'monospace', color: 'var(--text-secondary)' }}>{row['Purchasing Document'] || '-'}</td>
                   <td style={{ color: 'var(--text-secondary)' }}>{row['GR Date TMR'] || '-'}</td>
-                  <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--brand-blue)', fontWeight: 500 }} title={row['Short Text']}>
-                    {row['Short Text'] || '-'}
+                  <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#000000', fontWeight: 500 }} title={row['Storage Location']}>
+                    {row['Storage Location'] || '-'}
                   </td>
                   <td>{row['Status Keterangan GR'] || '-'}</td>
                 </tr>

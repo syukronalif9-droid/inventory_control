@@ -506,7 +506,7 @@ function App() {
               onChange={e => setMatlGroupFilter(e.target.value)}
               className="input-group"
             >
-              <option value="">Grup Mati</option>
+              <option value="">Grup Matl</option>
               <option value="Inventory">Inventory</option>
               <option value="Expense">Expense (OB)</option>
             </select>
