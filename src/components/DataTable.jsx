@@ -87,6 +87,7 @@ export default function DataTable({ data }) {
               type="text"
               className="input-field"
               placeholder="Purchasing Document"
+              style={{ paddingLeft: '2.5rem' }}
               value={searchTerm}
               onChange={handleSearch}
             />
