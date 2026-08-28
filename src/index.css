@@ -87,7 +87,7 @@ h1, h2, h3, h4 {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--gold);
+  color: #B8E0D2;
   text-shadow: 3px 3px 0px var(--border);
 }
 
