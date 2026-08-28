@@ -270,10 +270,10 @@ h1, h2, h3, h4 {
 .btn-upload:hover:not(:disabled) { background: var(--gold-dim); }
 
 .btn-reset {
-  background: var(--purple);
+  background: #dc2626;
   color: #ffffff;
 }
-.btn-reset:hover:not(:disabled) { background: var(--purple-light); }
+.btn-reset:hover:not(:disabled) { background: #b91c1c; }
 
 .icon-button.danger {
   background: var(--late-bg);

@@ -62,7 +62,7 @@ export default function SummaryCards({ data }) {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
       
       {/* INVENTORY Card */}
-      <div className="glass-card">
+      <div className="glass-card" style={{ background: '#B8E0D2' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div>
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
@@ -77,7 +77,7 @@ export default function SummaryCards({ data }) {
       </div>
       
       {/* EXPENSE Card */}
-      <div className="glass-card">
+      <div className="glass-card" style={{ background: '#B8E0D2' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div>
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
