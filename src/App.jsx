@@ -455,9 +455,6 @@ function App() {
       <header className="app-header" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', border: '2px solid var(--border)', padding: '0.3rem 0.75rem', boxShadow: '2px 2px 0 var(--border)' }}>
-            Live Data
-          </div>
         </div>
         
         <div className="controls-bar" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
