@@ -220,7 +220,7 @@ export default function DataTable({ data }) {
       {selectedRow && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'rgba(30, 58, 95, 0.4)',
+          backgroundColor: 'var(--blue-light)',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           zIndex: 1000, padding: '1rem', backdropFilter: 'blur(4px)'
         }}>
@@ -228,7 +228,7 @@ export default function DataTable({ data }) {
             width: '100%', maxWidth: '800px', maxHeight: '90vh',
             overflowY: 'auto', position: 'relative',
             background: 'var(--bg-card)', border: '1px solid var(--border-light)',
-            boxShadow: '0 25px 50px -12px rgba(30, 58, 95, 0.25)'
+            boxShadow: '0 25px 50px -12px var(--blue-light)'
           }}>
             <button 
               onClick={() => setSelectedRow(null)}

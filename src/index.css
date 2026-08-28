@@ -1,53 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* ── BRUTALIST DARK PALETTE ── */
-  --bg-root:        #0D0D0D;
-  --bg-card:        #111111;
-  --bg-card-hover:  #181818;
-  --bg-inset:       #0A0A0A;
+  /* ── PALETTE ── */
+  --bg-main:        #F5F9F7;
+  --bg-card:        #FFFFFF;
+  --mint:           #C8E6D7;
+  --blue-light:     #D6E5F0;
+  --peach:          #F5D4C4;
+  --pink:           #F5D4E6;
+  --yellow:         #FFE9C5;
+  --text-dark:      #2D3436;
+  --text-light:     #636E72;
+  --border:         #E0E0E0;
+  --border-accent:  #4CAF50;
 
-  --border-brutal:  3px solid #000000;
-  --border-thick:   2px solid #000000;
-  --shadow-brutal:  4px 4px 0px #000000;
-  --shadow-brutal-lg: 6px 6px 0px #000000;
-  --shadow-hover:   8px 8px 0px #000000;
-
-  /* ── ACCENT COLOURS ── */
-  --gold:           #F5C842;
-  --gold-dim:       #C9A520;
-  --gold-bg:        rgba(245, 200, 66, 0.12);
-  --purple:         #5B2D8E;
-  --purple-light:   #7A40B5;
-  --purple-bg:      rgba(91, 45, 142, 0.18);
-
-  /* ── TIMING STATUS ── */
-  --late-color:     #FF4444;
-  --late-bg:        rgba(255, 68, 68, 0.15);
-  --ontime-color:   #F5C842;
-  --ontime-bg:      rgba(245, 200, 66, 0.12);
-
-  /* ── TEXT ── */
-  --text-primary:   #F0F0F0;
-  --text-secondary: #888888;
-  --text-muted:     #555555;
-
-  /* ── LEGACY COMPAT ── */
-  --brand-blue:     #F5C842;
-  --brand-blue-glow: rgba(245, 200, 66, 0.25);
-  --brand-purple:   #5B2D8E;
+  --bg-root:        var(--bg-main);
+  --bg-card-hover:  var(--mint);
+  --bg-inset:       var(--bg-main);
+  --border-brutal:  3px solid var(--border);
+  --border-thick:   2px solid var(--border);
+  --shadow-brutal:  4px 4px 0px var(--border);
+  --shadow-brutal-lg: 6px 6px 0px var(--border);
+  --shadow-hover:   8px 8px 0px var(--border);
+  --gold:           var(--mint);
+  --gold-dim:       var(--border-accent);
+  --gold-bg:        var(--yellow);
+  --purple:         var(--blue-light);
+  --purple-light:   var(--blue-light);
+  --purple-bg:      var(--blue-light);
+  --late-color:     #C76B5A;
+  --late-bg:        var(--peach);
+  --ontime-color:   var(--border-accent);
+  --ontime-bg:      var(--mint);
+  --text-primary:   var(--text-dark);
+  --text-secondary: var(--text-light);
+  --text-muted:     var(--text-light);
+  --brand-blue:     var(--mint);
+  --brand-blue-glow: var(--mint);
+  --brand-purple:   var(--blue-light);
   --status-success: var(--gold);
   --status-success-bg: var(--gold-bg);
   --status-warning: var(--purple-light);
   --status-warning-bg: var(--purple-bg);
   --status-danger:  var(--late-color);
   --status-danger-bg: var(--late-bg);
-  --status-info:    #F5C842;
+  --status-info:    var(--mint);
   --status-info-bg: var(--gold-bg);
   --danger:         var(--late-color);
   --bg-dark:        var(--bg-inset);
-  --border-light:   #222222;
-  --border-strong:  #333333;
+  --border-light:   var(--border);
+  --border-strong:  var(--border-accent);
 }
 
 * {
@@ -86,7 +88,7 @@ h1, h2, h3, h4 {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--gold);
-  text-shadow: 3px 3px 0px #000000;
+  text-shadow: 3px 3px 0px var(--border);
 }
 
 .text-gradient {
@@ -96,10 +98,10 @@ h1, h2, h3, h4 {
 /* Brutalist Cards */
 .glass-card {
   background: var(--bg-card);
-  border: 3px solid #000000;
+  border: 3px solid var(--border);
   border-radius: 0;
   padding: 1.5rem;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--border);
   position: relative;
   overflow: visible;
   transition: box-shadow 0.15s ease, transform 0.15s ease;
@@ -112,7 +114,7 @@ h1, h2, h3, h4 {
 .glass-card:hover {
   background: var(--bg-card-hover);
   transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px #000000;
+  box-shadow: 8px 8px 0px var(--border);
 }
 
 /* Grids */
@@ -134,16 +136,16 @@ h1, h2, h3, h4 {
   gap: 0.75rem;
   background: var(--bg-card);
   padding: 1rem;
-  border: 3px solid #000000;
+  border: 3px solid var(--border);
   border-radius: 0;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--border);
   align-items: center;
 }
 
 /* Form Elements */
 .input-field {
   background: var(--bg-inset);
-  border: 2px solid #000000;
+  border: 2px solid var(--border);
   color: var(--text-primary);
   padding: 0.6rem 1rem;
   border-radius: 0;
@@ -171,17 +173,17 @@ h1, h2, h3, h4 {
   width: 100%;
   max-height: 65vh;
   overflow: auto;
-  border: 3px solid #000000;
+  border: 3px solid var(--border);
   border-radius: 0;
   background: var(--bg-card);
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--border);
   scrollbar-width: thin;
-  scrollbar-color: #333333 #111111;
+  scrollbar-color: var(--border-strong) var(--bg-card);
 }
 
 .table-wrapper::-webkit-scrollbar { width: 8px; height: 8px; }
-.table-wrapper::-webkit-scrollbar-track { background: #111111; }
-.table-wrapper::-webkit-scrollbar-thumb { background: #333333; border-radius: 0; }
+.table-wrapper::-webkit-scrollbar-track { background: var(--bg-card); }
+.table-wrapper::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 0; }
 
 .data-table {
   width: 100%;
@@ -192,13 +194,13 @@ h1, h2, h3, h4 {
 .data-table thead th {
   position: sticky;
   top: 0;
-  background: #0D0D0D;
+  background: var(--bg-root);
   padding: 1rem 0.85rem;
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--gold);
-  border-bottom: 3px solid #000000;
+  border-bottom: 3px solid var(--border);
   font-weight: 800;
   z-index: 10;
 }
@@ -206,7 +208,7 @@ h1, h2, h3, h4 {
 .data-table td {
   padding: 0.9rem 0.85rem;
   font-size: 0.875rem;
-  border-bottom: 1px solid #1A1A1A;
+  border-bottom: 1px solid var(--border);
   color: var(--text-primary);
   font-weight: 500;
 }
@@ -216,11 +218,11 @@ h1, h2, h3, h4 {
 }
 
 .data-table tbody tr:nth-child(even) {
-  background: rgba(255,255,255,0.02);
+  background: var(--bg-main);
 }
 
 .data-table tbody tr:hover {
-  background: rgba(245, 200, 66, 0.06);
+  background: var(--yellow);
 }
 
 .data-table tbody tr:last-child td { border-bottom: none; }
@@ -228,7 +230,7 @@ h1, h2, h3, h4 {
 /* Buttons */
 .btn {
   background: var(--bg-card);
-  border: 3px solid #000000;
+  border: 3px solid var(--border);
   color: var(--text-primary);
   padding: 0.65rem 1.25rem;
   border-radius: 0;
@@ -242,12 +244,12 @@ h1, h2, h3, h4 {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  box-shadow: 4px 4px 0px #000000;
+  box-shadow: 4px 4px 0px var(--border);
 }
 
 .btn:hover:not(:disabled) {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--border);
 }
 
 .btn:active:not(:disabled) {
@@ -263,7 +265,7 @@ h1, h2, h3, h4 {
 
 .btn-upload {
   background: var(--gold);
-  color: #000000;
+  color: var(--text-dark);
 }
 .btn-upload:hover:not(:disabled) { background: var(--gold-dim); }
 
@@ -305,18 +307,18 @@ h1, h2, h3, h4 {
 .badge.success { background: var(--gold-bg);   color: var(--gold);         border-color: var(--gold); }
 .badge.warning { background: var(--purple-bg); color: var(--purple-light); border-color: var(--purple-light); }
 .badge.info    { background: var(--gold-bg);   color: var(--gold);         border-color: var(--gold); }
-.badge.neutral { background: #1A1A1A;          color: var(--text-secondary); border-color: #333; }
+.badge.neutral { background: var(--bg-main);   color: var(--text-secondary); border-color: var(--border-strong); }
 
 /* Icons */
 .icon-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #000000;
+  border: 2px solid var(--border);
   border-radius: 0;
   width: 48px;
   height: 48px;
-  box-shadow: 2px 2px 0px #000000;
+  box-shadow: 2px 2px 0px var(--border);
 }
 
 
@@ -340,12 +342,12 @@ h1, h2, h3, h4 {
 
 .input-group.date-group {
   background: var(--bg-inset);
-  border: 2px solid #000000;
+  border: 2px solid var(--border);
   border-radius: 0;
   padding: 0.5rem 0.75rem;
   display: flex;
   align-items: center;
-  box-shadow: 2px 2px 0px #000000;
+  box-shadow: 2px 2px 0px var(--border);
 }
 
 .input-group.date-group:focus-within {
@@ -365,7 +367,7 @@ input[type="date"], input[type="month"], .date-input {
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0, 0, 0, 0.88);
+  background: var(--text-dark);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -381,13 +383,13 @@ input[type="date"], input[type="month"], .date-input {
 
 .modal-content {
   background: var(--bg-card);
-  border: 3px solid #000000;
+  border: 3px solid var(--border);
   border-radius: 0;
   width: 100%;
   max-width: 650px;
   max-height: 85vh;
   overflow-y: auto;
-  box-shadow: 6px 6px 0px #000000;
+  box-shadow: 6px 6px 0px var(--border);
   position: relative;
   scrollbar-width: thin;
   scrollbar-color: #333 #111;
@@ -397,13 +399,13 @@ input[type="date"], input[type="month"], .date-input {
 
 .modal-header {
   padding: 1.25rem 1.75rem;
-  border-bottom: 3px solid #000000;
+  border-bottom: 3px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
-  background: #0D0D0D;
+  background: var(--bg-root);
   z-index: 10;
 }
 
@@ -419,7 +421,7 @@ input[type="date"], input[type="month"], .date-input {
   flex-direction: column;
   gap: 0.3rem;
   padding-bottom: 1rem;
-  border-bottom: 1px solid #1A1A1A;
+  border-bottom: 1px solid var(--border);
 }
 .detail-row:last-child { border-bottom: none; }
 
@@ -458,7 +460,7 @@ input[type="date"], input[type="month"], .date-input {
   border-top-color: var(--gold);
   border-radius: 0;
   animation: spin 0.7s linear infinite;
-  box-shadow: 3px 3px 0px #000000;
+  box-shadow: 3px 3px 0px var(--border);
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -496,7 +498,7 @@ input[type="date"], input[type="month"], .date-input {
 ───────────────────────────── */
 select.input-group {
   background: var(--bg-inset);
-  border: 2px solid #000000;
+  border: 2px solid var(--border);
   color: var(--text-primary);
   padding: 0.6rem 1rem;
   border-radius: 0;
@@ -505,13 +507,13 @@ select.input-group {
   font-weight: 600;
   outline: none;
   cursor: pointer;
-  box-shadow: 2px 2px 0px #000000;
+  box-shadow: 2px 2px 0px var(--border);
 }
 select.input-group:focus {
   border-color: var(--gold);
   box-shadow: 3px 3px 0px var(--gold);
 }
 select.input-group option {
-  background: #111111;
+  background: var(--bg-card);
   color: var(--text-primary);
 }

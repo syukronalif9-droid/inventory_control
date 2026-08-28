@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { Truck } from 'lucide-react';
 
-const COLORS_SHIPPING = ['#FF4444', '#F5C842']; // Red=Late, Gold=Ontime
+const COLORS_SHIPPING = ['var(--peach)', 'var(--mint)'];
 
 export default function ShippingScoreCard({ data }) {
   const stats = useMemo(() => {
@@ -30,14 +30,14 @@ export default function ShippingScoreCard({ data }) {
   return (
     <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', height: '100%', boxSizing: 'border-box' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', borderBottom: '2px solid #000', paddingBottom: '1rem' }}>
-        <div className="icon-container" style={{ background: 'rgba(255, 68, 68, 0.12)', color: '#FF4444' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', borderBottom: '2px solid var(--border)', paddingBottom: '1rem' }}>
+        <div className="icon-container" style={{ background: 'var(--peach)', color: 'var(--text-dark)' }}>
           <Truck size={20} />
         </div>
         <div>
           <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 800, margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Tanggal Pengiriman TMR</h3>
         </div>
-        <div style={{ marginLeft: 'auto', background: '#1A1A1A', border: '2px solid #333', padding: '0.25rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
+        <div style={{ marginLeft: 'auto', background: 'var(--bg-main)', border: '2px solid var(--border-strong)', padding: '0.25rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
           Total <span style={{ color: 'var(--gold)', fontSize: '1rem' }}>{totalScored.toLocaleString('id-ID')}</span>
         </div>
       </div>
@@ -45,19 +45,19 @@ export default function ShippingScoreCard({ data }) {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', alignItems: 'center' }}>
         {/* Stats */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,68,68,0.08)', padding: '0.65rem 0.85rem', border: '2px solid #FF4444', boxShadow: '2px 2px 0 #000' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--peach)', padding: '0.65rem 0.85rem', border: '2px solid var(--peach)', boxShadow: '2px 2px 0 var(--border)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
-              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#FF4444', letterSpacing: '0.08em' }}>Late (&gt;2 )</span>
-              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#FF6666' }}>{latePercent}</span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-dark)', letterSpacing: '0.08em' }}>Late (&gt;2 )</span>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-dark)' }}>{latePercent}</span>
             </div>
-            <strong style={{ color: '#FF4444', fontSize: '1.5rem', fontWeight: 800 }}>{stats.lateCount.toLocaleString('id-ID')}</strong>
+            <strong style={{ color: 'var(--text-dark)', fontSize: '1.5rem', fontWeight: 800 }}>{stats.lateCount.toLocaleString('id-ID')}</strong>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(245,200,66,0.07)', padding: '0.65rem 0.85rem', border: '2px solid #F5C842', boxShadow: '2px 2px 0 #000' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'var(--mint)', padding: '0.65rem 0.85rem', border: '2px solid var(--border-accent)', boxShadow: '2px 2px 0 var(--border)' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
-              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#F5C842', letterSpacing: '0.08em' }}>Ontime (≤2 )</span>
-              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#C9A520' }}>{ontimePercent}</span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: 'var(--text-dark)', letterSpacing: '0.08em' }}>Ontime (≤2 )</span>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--border-accent)' }}>{ontimePercent}</span>
             </div>
-            <strong style={{ color: '#F5C842', fontSize: '1.5rem', fontWeight: 800 }}>{stats.ontimeCount.toLocaleString('id-ID')}</strong>
+            <strong style={{ color: 'var(--border-accent)', fontSize: '1.5rem', fontWeight: 800 }}>{stats.ontimeCount.toLocaleString('id-ID')}</strong>
           </div>
         </div>
 
@@ -76,15 +76,15 @@ export default function ShippingScoreCard({ data }) {
                     paddingAngle={4}
                     dataKey="value"
                     strokeWidth={3}
-                    stroke="#000"
+                    stroke="var(--border)"
                   >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS_SHIPPING[index % COLORS_SHIPPING.length]} />
                     ))}
                   </Pie>
                   <Tooltip
-                    contentStyle={{ background: '#111', border: '2px solid #000', borderRadius: 0, boxShadow: '3px 3px 0 #000', fontFamily: 'Space Grotesk', fontWeight: 700 }}
-                    itemStyle={{ color: '#F0F0F0' }}
+                    contentStyle={{ background: 'var(--bg-card)', border: '2px solid var(--border)', borderRadius: 0, boxShadow: '3px 3px 0 var(--border)', fontFamily: 'Space Grotesk', fontWeight: 700 }}
+                    itemStyle={{ color: 'var(--text-dark)' }}
                     formatter={(value) => {
                       const pct = totalScored > 0 ? (value / totalScored * 100).toFixed(0) : 0;
                       return [`${value} (${pct}%)`, ''];

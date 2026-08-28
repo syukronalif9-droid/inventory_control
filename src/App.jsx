@@ -69,7 +69,7 @@ const CustomDateInput = ({ value, onChange, title }) => {
   };
 
   return (
-    <div style={{ position: 'relative', minWidth: '140px', height: '36px', display: 'flex', alignItems: 'center', background: 'var(--bg-inset)', border: '2px solid #000', boxShadow: '2px 2px 0 #000' }}>
+    <div style={{ position: 'relative', minWidth: '140px', height: '36px', display: 'flex', alignItems: 'center', background: 'var(--bg-inset)', border: '2px solid var(--border)', boxShadow: '2px 2px 0 var(--border)' }}>
       <div style={{ position: 'absolute', left: '0', top: '0', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: value ? 'var(--text-primary)' : 'var(--text-secondary)', pointerEvents: 'none', fontWeight: 700, fontSize: '0.85rem', whiteSpace: 'nowrap', fontFamily: 'Space Grotesk, sans-serif' }}>
         {getDisplayValue()}
       </div>
@@ -455,7 +455,7 @@ function App() {
       <header className="app-header" style={{ marginBottom: '2rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
           <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', border: '2px solid #222', padding: '0.3rem 0.75rem', boxShadow: '2px 2px 0 #000' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-secondary)', border: '2px solid var(--border)', padding: '0.3rem 0.75rem', boxShadow: '2px 2px 0 var(--border)' }}>
             Live Data
           </div>
         </div>

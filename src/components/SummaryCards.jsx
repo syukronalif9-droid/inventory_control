@@ -35,23 +35,23 @@ export default function SummaryCards({ data }) {
   const CardRow = ({ label, value, isGold }) => (
     <div style={{
       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      background: isGold ? 'rgba(245, 200, 66, 0.07)' : 'rgba(91, 45, 142, 0.12)',
+      background: isGold ? 'var(--mint)' : 'var(--blue-light)',
       padding: '0.75rem 1rem',
-      border: isGold ? '2px solid #F5C842' : '2px solid #5B2D8E',
-      boxShadow: isGold ? '3px 3px 0 #000' : '3px 3px 0 #000',
+      border: isGold ? '2px solid var(--border-accent)' : '2px solid var(--blue-light)',
+      boxShadow: '3px 3px 0 var(--border)',
       marginBottom: '0.6rem',
     }}>
       <span style={{
         fontSize: '0.8rem', fontWeight: 700, textTransform: 'uppercase',
         letterSpacing: '0.08em',
-        color: isGold ? '#F5C842' : '#7A40B5',
+        color: isGold ? 'var(--border-accent)' : 'var(--text-dark)',
       }}>
         {label}
       </span>
       <strong style={{
         fontSize: '2rem', fontWeight: 800, lineHeight: 1,
-        color: isGold ? '#F5C842' : '#7A40B5',
-        textShadow: isGold ? '2px 2px 0 rgba(0,0,0,0.6)' : '2px 2px 0 rgba(0,0,0,0.6)',
+        color: isGold ? 'var(--border-accent)' : 'var(--text-dark)',
+        textShadow: '2px 2px 0 var(--border)',
       }}>
         {value.toLocaleString('id-ID')}
       </strong>
@@ -68,7 +68,7 @@ export default function SummaryCards({ data }) {
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
             <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>INVENTORY</h3>
           </div>
-          <div className="icon-container" style={{ background: 'rgba(245, 200, 66, 0.1)', color: '#F5C842' }}>
+          <div className="icon-container" style={{ background: 'var(--yellow)', color: 'var(--text-dark)' }}>
             <Box size={24} strokeWidth={2.5} />
           </div>
         </div>
@@ -83,7 +83,7 @@ export default function SummaryCards({ data }) {
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
             <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>EXPENSE (OB)</h3>
           </div>
-          <div className="icon-container" style={{ background: 'rgba(91, 45, 142, 0.15)', color: '#7A40B5' }}>
+          <div className="icon-container" style={{ background: 'var(--blue-light)', color: 'var(--text-dark)' }}>
             <DollarSign size={24} strokeWidth={2.5} />
           </div>
         </div>
