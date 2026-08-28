@@ -9,19 +9,21 @@ export default function SummaryCards({ data }) {
     let expBelumGRCount = 0;
 
     data.forEach(item => {
-      const status = item['Status Keterangan GR'];
-      const matlGroup = (item['Matl. Group'] || '').toLowerCase();
+      const status = String(item['Status Keterangan GR'] || '').trim().toUpperCase();
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      const isExpense = matlGroup.includes('expence') || matlGroup.includes('expense');
+      const isInventory = matlGroup.includes('invent');
 
-      if (matlGroup.includes('expence') || matlGroup.includes('expense')) {
+      if (isExpense) {
         if (status === 'SUDAH GR') {
             expSudahGRCount += 1;
-        } else {
+        } else if (status === 'BELUM GR') {
             expBelumGRCount += 1;
         }
-      } else {
+      } else if (isInventory) {
         if (status === 'SUDAH GR') {
             invSudahGRCount += 1;
-        } else {
+        } else if (status === 'BELUM GR') {
             invBelumGRCount += 1;
         }
       }
