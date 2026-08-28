@@ -101,7 +101,7 @@ export default function DataTable({ data }) {
               <th onClick={() => requestSort('TMR Number')} style={{ cursor: 'pointer', minWidth: '110px', userSelect: 'none' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>TMR Number {renderSortIcon('TMR Number')}</div>
               </th>
-              <th onClick={() => requestSort('Purchasing Document')} style={{ cursor: 'pointer', minWidth: '160px', userSelect: 'none' }}>
+              <th onClick={() => requestSort('Purchasing Document')} style={{ cursor: 'pointer', minWidth: '160px', userSelect: 'none', textAlign: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Purchasing Document {renderSortIcon('Purchasing Document')}</div>
               </th>
               <th onClick={() => requestSort('GR Date TMR')} style={{ cursor: 'pointer', minWidth: '110px', userSelect: 'none' }}>
@@ -120,7 +120,7 @@ export default function DataTable({ data }) {
               currentData.map((row, idx) => (
                 <tr key={idx} onClick={() => setSelectedRow(row)} style={{ cursor: 'pointer' }}>
                   <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{row['TMR Number'] || '-'}</td>
-                  <td style={{ fontFamily: 'monospace', color: 'var(--text-secondary)' }}>{row['Purchasing Document'] || '-'}</td>
+                  <td style={{ fontFamily: 'monospace', color: 'var(--text-secondary)', textAlign: 'center' }}>{row['Purchasing Document'] || '-'}</td>
                   <td style={{ color: 'var(--text-secondary)' }}>{row['GR Date TMR'] || '-'}</td>
                   <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#000000', fontWeight: 500 }} title={row['Storage Location']}>
                     {row['Storage Location'] || '-'}
