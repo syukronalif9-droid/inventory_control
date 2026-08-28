@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, ChevronLeft, ChevronRight, Database, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, X } from 'lucide-react';
 
 export default function DataTable({ data }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,13 +77,13 @@ export default function DataTable({ data }) {
     <div style={{ marginTop: '3rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.5rem' }}>
-          <Database className="text-gradient" style={{ color: '#B8E0D2' }} />
+          <Search className="text-gradient" />
           Data Records <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>({totalItemCount.toLocaleString('id-ID')} Total Item)</span>
         </h2>
 
         <div className="controls-bar">
           <div style={{ position: 'relative', display: 'flex', alignItems: 'center', minWidth: '250px' }}>
-            <Search size={16} style={{ position: 'absolute', left: '1rem', color: '#B8E0D2', pointerEvents: 'none' }} />
+            <Search size={16} style={{ position: 'absolute', left: '1rem', color: 'var(--text-secondary)', pointerEvents: 'none' }} />
             <input
               type="text"
               className="input-field"
