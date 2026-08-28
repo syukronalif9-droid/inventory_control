@@ -15,7 +15,7 @@
   --border-accent:  #4CAF50;
 
   --bg-root:        var(--bg-main);
-  --bg-card-hover:  var(--mint);
+  --bg-card-hover:  var(--bg-card);
   --bg-inset:       var(--bg-main);
   --border-brutal:  3px solid var(--border);
   --border-thick:   2px solid var(--border);
