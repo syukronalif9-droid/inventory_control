@@ -199,7 +199,7 @@ h1, h2, h3, h4 {
   font-size: 0.72rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--gold);
+  color: var(--text-dark);
   border-bottom: 3px solid var(--border);
   font-weight: 800;
   z-index: 10;
