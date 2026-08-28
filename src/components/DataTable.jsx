@@ -86,6 +86,7 @@ export default function DataTable({ data }) {
             <input
               type="text"
               className="input-field"
+              placeholder="Purchasing Document"
               value={searchTerm}
               onChange={handleSearch}
             />
