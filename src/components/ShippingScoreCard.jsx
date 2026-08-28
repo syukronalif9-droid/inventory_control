@@ -19,8 +19,8 @@ export default function ShippingScoreCard({ data }) {
   }, [data]);
 
   const chartData = [
-    { name: 'Terlambat (>2 jam)', value: stats.lateCount },
-    { name: 'Tepat Waktu (≤2 jam)', value: stats.ontimeCount }
+    { name: 'Late (>2 )', value: stats.lateCount },
+    { name: 'Ontime (≤2 )', value: stats.ontimeCount }
   ];
 
   const totalScored = stats.lateCount + stats.ontimeCount;
@@ -35,7 +35,6 @@ export default function ShippingScoreCard({ data }) {
           <Truck size={20} />
         </div>
         <div>
-          <div style={{ fontSize: '0.62rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'var(--text-secondary)' }}>Grafik Ketepatan</div>
           <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 800, margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Tanggal Pengiriman TMR</h3>
         </div>
         <div style={{ marginLeft: 'auto', background: '#1A1A1A', border: '2px solid #333', padding: '0.25rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
@@ -48,14 +47,14 @@ export default function ShippingScoreCard({ data }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,68,68,0.08)', padding: '0.65rem 0.85rem', border: '2px solid #FF4444', boxShadow: '2px 2px 0 #000' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
-              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#FF4444', letterSpacing: '0.08em' }}>Terlambat (&gt;2 jam)</span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#FF4444', letterSpacing: '0.08em' }}>Late (&gt;2 )</span>
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#FF6666' }}>{latePercent}</span>
             </div>
             <strong style={{ color: '#FF4444', fontSize: '1.5rem', fontWeight: 800 }}>{stats.lateCount.toLocaleString('id-ID')}</strong>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(245,200,66,0.07)', padding: '0.65rem 0.85rem', border: '2px solid #F5C842', boxShadow: '2px 2px 0 #000' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
-              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#F5C842', letterSpacing: '0.08em' }}>Tepat Waktu (≤2 jam)</span>
+              <span style={{ fontSize: '0.68rem', fontWeight: 800, textTransform: 'uppercase', color: '#F5C842', letterSpacing: '0.08em' }}>Ontime (≤2 )</span>
               <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#C9A520' }}>{ontimePercent}</span>
             </div>
             <strong style={{ color: '#F5C842', fontSize: '1.5rem', fontWeight: 800 }}>{stats.ontimeCount.toLocaleString('id-ID')}</strong>

@@ -59,12 +59,12 @@ export default function SummaryCards({ data }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
       
-      {/* INVENTARIS Card */}
+      {/* INVENTORY Card */}
       <div className="glass-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div>
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
-            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>INVENTARIS</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>INVENTORY</h3>
           </div>
           <div className="icon-container" style={{ background: 'rgba(245, 200, 66, 0.1)', color: '#F5C842' }}>
             <Box size={24} strokeWidth={2.5} />
