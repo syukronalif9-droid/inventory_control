@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { ClipboardCheck } from 'lucide-react';
 
-const COLORS_GR = ['var(--peach)', 'var(--mint)'];
+const COLORS_GR = ['#B22222', 'var(--mint)'];
 
 export default function GRScoreCard({ data }) {
   const stats = useMemo(() => {

@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { Truck } from 'lucide-react';
 
-const COLORS_SHIPPING = ['var(--peach)', 'var(--mint)'];
+const COLORS_SHIPPING = ['#B22222', 'var(--mint)'];
 
 export default function ShippingScoreCard({ data }) {
   const stats = useMemo(() => {
