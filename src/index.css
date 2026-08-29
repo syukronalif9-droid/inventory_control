@@ -30,8 +30,8 @@
   --purple-bg:      var(--blue-light);
   --late-color:     #B22222;
   --late-bg:        #F6D1D1;
-  --ontime-color:   var(--border-accent);
-  --ontime-bg:      var(--mint);
+  --ontime-color:   #0A5C0A;
+  --ontime-bg:      #D8F0DA;
   --text-primary:   var(--text-dark);
   --text-secondary: var(--text-light);
   --text-muted:     var(--text-light);

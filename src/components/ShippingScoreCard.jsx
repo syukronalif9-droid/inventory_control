@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import { Truck } from 'lucide-react';
 
-const COLORS_SHIPPING = ['#B22222', 'var(--mint)'];
+const COLORS_SHIPPING = ['#B22222', '#0A5C0A'];
 
 export default function ShippingScoreCard({ data }) {
   const stats = useMemo(() => {
@@ -37,8 +37,8 @@ export default function ShippingScoreCard({ data }) {
         <div>
           <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 800, margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Tanggal Pengiriman TMR</h3>
         </div>
-        <div style={{ marginLeft: 'auto', background: 'var(--bg-main)', border: '2px solid var(--border-strong)', padding: '0.25rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
-          Total <span style={{ color: 'var(--gold)', fontSize: '1rem' }}>{totalScored.toLocaleString('id-ID')}</span>
+        <div style={{ marginLeft: 'auto', background: 'var(--bg-main)', border: '2px solid #0A5C0A', padding: '0.25rem 0.6rem', fontSize: '0.7rem', fontWeight: 800, letterSpacing: '0.08em', color: '#0A5C0A' }}>
+          Total <span style={{ color: '#0A5C0A', fontSize: '1rem' }}>{totalScored.toLocaleString('id-ID')}</span>
         </div>
       </div>
 
