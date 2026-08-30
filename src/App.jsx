@@ -680,57 +680,6 @@ function App() {
 
             <DataTable data={filteredData} />
           </div>
-
-          <aside className="holiday-sidebar glass-card">
-            <div className="holiday-header">
-              <h3>Daftar Libur Nasional</h3>
-            </div>
-
-            <div className="holiday-input-row holiday-input-stack">
-              <input
-                type="date"
-                value={newHoliday}
-                onChange={(e) => setNewHoliday(e.target.value)}
-                className="input-field holiday-date-input"
-              />
-              <input
-                type="text"
-                value={newHolidayName}
-                onChange={(e) => setNewHolidayName(e.target.value)}
-                placeholder="Nama libur"
-                className="input-field holiday-name-input"
-              />
-              <button className="btn btn-small" onClick={addHoliday} type="button">
-                <Plus size={14} />
-                <span>Tambah</span>
-              </button>
-            </div>
-
-            <ul className="holiday-list">
-              {holidayList.length === 0 ? (
-                <li className="holiday-empty">Belum ada tanggal libur</li>
-              ) : (
-                holidayList.map((item) => {
-                  const date = typeof item === 'string' ? item : item.date;
-                  const label = typeof item === 'string' ? 'Libur Nasional' : item.label;
-                  const displayText = formatHolidayText(date, label);
-                  return (
-                    <li className="holiday-item" key={date}>
-                      <span>{displayText}</span>
-                      <button
-                        type="button"
-                        className="holiday-remove"
-                        onClick={() => removeHoliday(date)}
-                        aria-label={`Hapus ${date}`}
-                      >
-                        <Trash2 size={12} />
-                      </button>
-                    </li>
-                  );
-                })
-              )}
-            </ul>
-          </aside>
         </main>
       ) : (
         <main className="holiday-page">
