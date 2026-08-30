@@ -523,29 +523,6 @@ function App() {
      return [...new Set(dests)].sort();
   }, [data]);
 
-  const dashboardInsights = useMemo(() => {
-    const total = filteredData.length;
-    const lateShipping = filteredData.filter(item => item['Status Shipping'] === 'Late').length;
-    const lateGr = filteredData.filter(item => item['Status GR 101'] === 'Late').length;
-
-    const destinationCounts = filteredData.reduce((acc, item) => {
-      const destination = item['Destination'];
-      if (!destination || destination === '-' || destination === 'null' || destination === 'undefined') return acc;
-      acc[destination] = (acc[destination] || 0) + 1;
-      return acc;
-    }, {});
-
-    const topDestination = Object.entries(destinationCounts).sort((a, b) => b[1] - a[1])[0];
-
-    return {
-      total,
-      lateShipping,
-      lateGr,
-      topDestination: topDestination ? `${topDestination[0]} (${topDestination[1]})` : 'Belum ada data',
-      holidayCount: holidayList.length
-    };
-  }, [filteredData, holidayList]);
-
   if (loading) {
     return (
       <div className="loader-container">
@@ -701,39 +678,6 @@ function App() {
             </div>
 
             <DataTable data={filteredData} />
-
-            <section className="insight-panel glass-card">
-              <div className="insight-header">
-                <h3>Quick Insight</h3>
-              </div>
-
-              <div className="insight-grid">
-                <div className="insight-tile">
-                  <span className="insight-label">Total Data</span>
-                  <strong>{dashboardInsights.total}</strong>
-                </div>
-
-                <div className="insight-tile warning">
-                  <span className="insight-label">Late Shipping</span>
-                  <strong>{dashboardInsights.lateShipping}</strong>
-                </div>
-
-                <div className="insight-tile danger">
-                  <span className="insight-label">Late GR 101</span>
-                  <strong>{dashboardInsights.lateGr}</strong>
-                </div>
-
-                <div className="insight-tile success">
-                  <span className="insight-label">Top Destination</span>
-                  <strong>{dashboardInsights.topDestination}</strong>
-                </div>
-
-                <div className="insight-tile">
-                  <span className="insight-label">Libur Aktif</span>
-                  <strong>{dashboardInsights.holidayCount}</strong>
-                </div>
-              </div>
-            </section>
           </div>
         </main>
       ) : (
