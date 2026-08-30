@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Calendar, X, UploadCloud, DownloadCloud, Trash2 } from 'lucide-react';
+import { Calendar, X, UploadCloud, DownloadCloud, Trash2, Plus } from 'lucide-react';
 import { read, utils, writeFile } from 'xlsx';
 import { supabase } from './supabaseClient';
 
@@ -88,11 +88,36 @@ const CustomDateInput = ({ value, onChange, title }) => {
   );
 };
 
+const defaultHolidayList = [
+  '01/01/2026',
+  '02/01/2026',
+  '12/02/2026',
+  '03/03/2026',
+  '21/04/2026',
+  '01/05/2026',
+  '26/05/2026',
+  '17/08/2026',
+  '05/09/2026',
+  '25/12/2026'
+];
+
+const formatISODateToDDMMYYYY = (value) => {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  const y = date.getFullYear();
+  return `${d}/${m}/${y}`;
+};
 
 function App() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [holidayList, setHolidayList] = useState(defaultHolidayList);
+  const [newHoliday, setNewHoliday] = useState('');
+  const [rawData, setRawData] = useState([]);
 
   const fileInputRef = useRef(null);
 
@@ -111,7 +136,6 @@ function App() {
         let from = 0;
         const step = 1000;
         
-        // Fetch data in chunks to bypass 1000 row limit
         while (true) {
           const { data: chunk, error } = await supabase
             .from('inventory_records')
@@ -126,65 +150,7 @@ function App() {
           from += step;
         }
         
-        // Map database columns back to original keys needed by components and export
-        const mappedData = allData.map(row => {
-          const qty = parseFloat(row.quantity_tmr) || 0;
-          const md = row.material_document;
-          const isBelumGr = !md || md === 'null' || md === '0' || md === '';
-          
-          const mappedRow = {
-            'TMR Number': row.tmr_number,
-            'Status TMR': (!row.status_tmr || row.status_tmr === 'null') ? '-' : row.status_tmr,
-            'Destination': row.destination_1,
-            'Shipping Date': formatToDDMMYYYY(row.shipping_date),
-            'GR Date TMR': formatToDDMMYYYY(row.gr_date_tmr),
-            'Purchasing Document': row.purchasing_document,
-            'Item': row.item,
-            'Material': row.material,
-            'Short Text': row.short_text,
-            'Quantity TMR': qty,
-            'Material Document': row.material_document,
-            'Material Doc. Year': row.material_doc__year,
-            'Material Doc.Item': row.material_doc_item,
-            'Storage Location': row.storage_location,
-            'Movement Type': row.movement_type,
-            'QTY GR': parseFloat(row.qty_gr) || 0,
-            'Posting Date': formatToDDMMYYYY(row.posting_date),
-            'Entry Date': formatToDDMMYYYY(row.entry_date),
-            'Matl.Group': row.material_type,
-            'JUMLAH GR': isBelumGr ? 0 : qty,
-            'Belum GR': isBelumGr ? qty : 0,
-            
-            // These 3 are kept just so the DataTable filters/renders don't break
-            'Status Keterangan GR': row.status_keterangan_gr,
-            'Destination.1': row.destination_1,
-            'Matl. Group': row.material_type
-          };
-          
-          // Calculate work days and status for Shipping
-          const workDays = calculateWorkDays(mappedRow['Shipping Date'], mappedRow['GR Date TMR'], []);
-          mappedRow['Waktu Pengerjaan'] = workDays;
-          
-          if (workDays === null) {
-              mappedRow['Status Shipping'] = '-';
-          } else {
-              mappedRow['Status Shipping'] = workDays > 2 ? 'Late' : 'Ontime';
-          }
-          
-          // Calculate work days and status for GR 101
-          const workDaysGR = calculateWorkDays(mappedRow['GR Date TMR'], mappedRow['Entry Date'], []);
-          mappedRow['Waktu GR 101'] = workDaysGR;
-          
-          if (workDaysGR === null) {
-              mappedRow['Status GR 101'] = '-';
-          } else {
-              mappedRow['Status GR 101'] = workDaysGR > 2 ? 'Late' : 'Ontime';
-          }
-          
-          return mappedRow;
-        });
-        
-        setData(mappedData);
+        setRawData(allData);
         setLoading(false);
       } catch (err) {
         console.error(err);
@@ -195,6 +161,69 @@ function App() {
     
     fetchFromSupabase();
   }, []);
+
+  useEffect(() => {
+    if (!rawData.length) {
+      setData([]);
+      return;
+    }
+
+    const mappedData = rawData.map(row => {
+      const qty = parseFloat(row.quantity_tmr) || 0;
+      const md = row.material_document;
+      const isBelumGr = !md || md === 'null' || md === '0' || md === '';
+      
+      const mappedRow = {
+        'TMR Number': row.tmr_number,
+        'Status TMR': (!row.status_tmr || row.status_tmr === 'null') ? '-' : row.status_tmr,
+        'Destination': row.destination_1,
+        'Shipping Date': formatToDDMMYYYY(row.shipping_date),
+        'GR Date TMR': formatToDDMMYYYY(row.gr_date_tmr),
+        'Purchasing Document': row.purchasing_document,
+        'Item': row.item,
+        'Material': row.material,
+        'Short Text': row.short_text,
+        'Quantity TMR': qty,
+        'Material Document': row.material_document,
+        'Material Doc. Year': row.material_doc__year,
+        'Material Doc.Item': row.material_doc_item,
+        'Storage Location': row.storage_location,
+        'Movement Type': row.movement_type,
+        'QTY GR': parseFloat(row.qty_gr) || 0,
+        'Posting Date': formatToDDMMYYYY(row.posting_date),
+        'Entry Date': formatToDDMMYYYY(row.entry_date),
+        'Matl.Group': row.material_type,
+        'JUMLAH GR': isBelumGr ? 0 : qty,
+        'Belum GR': isBelumGr ? qty : 0,
+        
+        'Status Keterangan GR': row.status_keterangan_gr,
+        'Destination.1': row.destination_1,
+        'Matl. Group': row.material_type
+      };
+      
+      const workDays = calculateWorkDays(mappedRow['Shipping Date'], mappedRow['GR Date TMR'], holidayList);
+      mappedRow['Waktu Pengerjaan'] = workDays;
+      
+      if (workDays === null) {
+          mappedRow['Status Shipping'] = '-';
+      } else {
+          mappedRow['Status Shipping'] = workDays > 2 ? 'Late' : 'Ontime';
+      }
+      
+      const workDaysGR = calculateWorkDays(mappedRow['GR Date TMR'], mappedRow['Entry Date'], holidayList);
+      mappedRow['Waktu GR 101'] = workDaysGR;
+      
+      if (workDaysGR === null) {
+          mappedRow['Status GR 101'] = '-';
+      } else {
+          mappedRow['Status GR 101'] = workDaysGR > 2 ? 'Late' : 'Ontime';
+      }
+      
+      return mappedRow;
+    });
+    
+    setData(mappedData);
+  }, [rawData, holidayList]);
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -351,6 +380,29 @@ function App() {
       alert("Gagal menghapus data: " + err.message);
       setLoading(false);
     }
+  };
+
+  const addHoliday = () => {
+    const formatted = formatISODateToDDMMYYYY(newHoliday);
+    if (!formatted) {
+      return;
+    }
+
+    if (holidayList.includes(formatted)) {
+      setNewHoliday('');
+      return;
+    }
+
+    setHolidayList(prev => [...prev, formatted].sort((a, b) => {
+      const [dayA, monthA, yearA] = a.split('/').map(Number);
+      const [dayB, monthB, yearB] = b.split('/').map(Number);
+      return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
+    }));
+    setNewHoliday('');
+  };
+
+  const removeHoliday = (date) => {
+    setHolidayList(prev => prev.filter(item => item !== date));
   };
 
   const filteredData = useMemo(() => {
@@ -565,16 +617,56 @@ function App() {
         </div>
       </header>
 
-      <main>
-        <SummaryCards data={filteredData} />
-        
-        {/* Baris bawah untuk Score Card lainnya */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-          <ShippingScoreCard data={filteredData} />
-          <GRScoreCard data={filteredData} />
+      <main className="main-layout">
+        <div className="main-content">
+          <SummaryCards data={filteredData} />
+          
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+            <ShippingScoreCard data={filteredData} />
+            <GRScoreCard data={filteredData} />
+          </div>
+
+          <DataTable data={filteredData} />
         </div>
 
-        <DataTable data={filteredData} />
+        <aside className="holiday-sidebar glass-card">
+          <div className="holiday-header">
+            <h3>Daftar Libur Nasional</h3>
+          </div>
+
+          <div className="holiday-input-row">
+            <input
+              type="date"
+              value={newHoliday}
+              onChange={(e) => setNewHoliday(e.target.value)}
+              className="input-field holiday-date-input"
+            />
+            <button className="btn btn-small" onClick={addHoliday} type="button">
+              <Plus size={14} />
+              <span>Tambah</span>
+            </button>
+          </div>
+
+          <ul className="holiday-list">
+            {holidayList.length === 0 ? (
+              <li className="holiday-empty">Belum ada tanggal libur</li>
+            ) : (
+              holidayList.map((date) => (
+                <li className="holiday-item" key={date}>
+                  <span>{date}</span>
+                  <button
+                    type="button"
+                    className="holiday-remove"
+                    onClick={() => removeHoliday(date)}
+                    aria-label={`Hapus ${date}`}
+                  >
+                    <Trash2 size={12} />
+                  </button>
+                </li>
+              ))
+            )}
+          </ul>
+        </aside>
       </main>
     </div>
   );
