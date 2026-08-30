@@ -204,6 +204,63 @@ body {
   cursor: pointer;
 }
 
+.insight-panel {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+}
+
+.insight-header {
+  margin-bottom: 1rem;
+}
+
+.insight-header h3 {
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.insight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.9rem;
+}
+
+.insight-tile {
+  background: var(--bg-main);
+  border: 2px solid var(--border);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  box-shadow: 3px 3px 0 var(--border);
+}
+
+.insight-tile.warning {
+  background: #fff3e2;
+}
+
+.insight-tile.danger {
+  background: #fde7e7;
+}
+
+.insight-tile.success {
+  background: #e7f7ea;
+}
+
+.insight-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
+}
+
+.insight-tile strong {
+  font-size: 1.15rem;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
 @media (max-width: 1100px) {
   .main-layout {
     grid-template-columns: 1fr;

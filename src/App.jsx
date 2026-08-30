@@ -679,6 +679,39 @@ function App() {
             </div>
 
             <DataTable data={filteredData} />
+
+            <section className="insight-panel glass-card">
+              <div className="insight-header">
+                <h3>Quick Insight</h3>
+              </div>
+
+              <div className="insight-grid">
+                <div className="insight-tile">
+                  <span className="insight-label">Total Data</span>
+                  <strong>{dashboardInsights.total}</strong>
+                </div>
+
+                <div className="insight-tile warning">
+                  <span className="insight-label">Late Shipping</span>
+                  <strong>{dashboardInsights.lateShipping}</strong>
+                </div>
+
+                <div className="insight-tile danger">
+                  <span className="insight-label">Late GR 101</span>
+                  <strong>{dashboardInsights.lateGr}</strong>
+                </div>
+
+                <div className="insight-tile success">
+                  <span className="insight-label">Top Destination</span>
+                  <strong>{dashboardInsights.topDestination}</strong>
+                </div>
+
+                <div className="insight-tile">
+                  <span className="insight-label">Libur Aktif</span>
+                  <strong>{dashboardInsights.holidayCount}</strong>
+                </div>
+              </div>
+            </section>
           </div>
         </main>
       ) : (

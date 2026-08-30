@@ -27,37 +27,36 @@ export function calculateWorkDays(startDateStr, endDateStr, holidayList = []) {
     end = new Date(); // If GR Date is empty, use today
     end.setHours(0, 0, 0, 0);
   }
-  
-  // If start is after end, returning 0 might be safer, or negative. Let's return 0.
+
   if (start > end) return 0;
 
-  // Parse holidays to Date objects
-  const holidays = holidayList.map(h => {
-     const d = parseDDMMYYYY(h);
-     if (d) d.setHours(0, 0, 0, 0);
-     return d;
-  }).filter(Boolean);
+  const holidays = (Array.isArray(holidayList) ? holidayList : [])
+    .map((item) => {
+      const dateValue = typeof item === 'string' ? item : item?.date;
+      const d = parseDDMMYYYY(dateValue);
+      if (d) d.setHours(0, 0, 0, 0);
+      return d;
+    })
+    .filter(Boolean);
 
   let workDays = 0;
   let currentDate = new Date(start);
 
   while (currentDate <= end) {
     const dayOfWeek = currentDate.getDay(); // 0 is Sunday, 1-6 are Mon-Sat
-    
-    // Only count Mon-Sat
-    if (dayOfWeek !== 0) {
-      // Check if it's a holiday
-      const isHoliday = holidays.some(h => isSameDay(h, currentDate));
-      if (!isHoliday) {
-        workDays++;
-      }
+
+    if (dayOfWeek === 0) {
+      currentDate.setDate(currentDate.getDate() + 1);
+      continue;
     }
-    
-    // Move to next day
+
+    const isHoliday = holidays.some((holiday) => isSameDay(holiday, currentDate));
+    if (!isHoliday) {
+      workDays++;
+    }
+
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  // The formula requires subtracting 1 from the final result.
-  // We ensure it doesn't go below 0 (e.g., if workDays was 0 somehow).
   return Math.max(0, workDays - 1);
 }
