@@ -89,16 +89,23 @@ const CustomDateInput = ({ value, onChange, title }) => {
 };
 
 const defaultHolidayList = [
-  { date: '01/01/2026', label: 'Tahun Baru' },
-  { date: '02/01/2026', label: 'Libur Tambahan' },
-  { date: '12/02/2026', label: 'Isra Mi\'raj' },
-  { date: '03/03/2026', label: 'Hari Raya Nyepi' },
-  { date: '21/04/2026', label: 'Idul Fitri' },
-  { date: '01/05/2026', label: 'Hari Buruh' },
-  { date: '26/05/2026', label: 'Kenaikan Isa Almasih' },
-  { date: '17/08/2026', label: 'Hari Kemerdekaan' },
-  { date: '05/09/2026', label: 'Maulid Nabi' },
-  { date: '25/12/2026', label: 'Natal' }
+  { date: '01/01/2026', label: 'Tahun Baru 2025 Masehi' },
+  { date: '16/01/2026', label: "Isra' Mi'raj Nabi Muhammad SAW" },
+  { date: '17/02/2026', label: 'Tahun Baru Imlek 5777' },
+  { date: '19/03/2026', label: 'Hari Suci Nyepi' },
+  { date: '21/03/2026', label: 'Hari Raya Idul Fitri' },
+  { date: '22/03/2026', label: 'Hari Raya Idul Fitri' },
+  { date: '03/04/2026', label: 'Wafat Yesus Kristus' },
+  { date: '05/04/2026', label: 'Hari Raya Paskah' },
+  { date: '01/05/2026', label: 'Hari Buruh Internasional' },
+  { date: '14/05/2026', label: 'Kenaikan Yesus Kristus' },
+  { date: '27/05/2026', label: 'Hari Raya Idul Adha 10 Dzulhijjah 1447 H' },
+  { date: '31/05/2026', label: 'Hari Raya Waisak' },
+  { date: '01/06/2026', label: 'Hari Lahir Pancasila' },
+  { date: '16/06/2026', label: 'Tahun Baru Hijriyah 1 Muharram 1448 H' },
+  { date: '17/08/2026', label: 'Hari Proklamasi Kemerdekaan Repu' },
+  { date: '25/08/2026', label: 'Maulid Nabi Muhammad SAW' },
+  { date: '25/12/2026', label: 'Hari Raya Natal' }
 ];
 
 const formatISODateToDDMMYYYY = (value) => {
@@ -114,6 +121,17 @@ const formatISODateToDDMMYYYY = (value) => {
   const m = String(date.getMonth() + 1).padStart(2, '0');
   const y = date.getFullYear();
   return `${d}/${m}/${y}`;
+};
+
+const monthNames = [
+  'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+  'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+];
+
+const formatHolidayText = (dateString, label) => {
+  const [day, month, year] = dateString.split('/').map(Number);
+  if (!day || !month || !year) return `${dateString}: ${label}`;
+  return `${day} ${monthNames[month - 1]} ${year}: ${label}`;
 };
 
 function App() {
@@ -695,9 +713,10 @@ function App() {
                 holidayList.map((item) => {
                   const date = typeof item === 'string' ? item : item.date;
                   const label = typeof item === 'string' ? 'Libur Nasional' : item.label;
+                  const displayText = formatHolidayText(date, label);
                   return (
                     <li className="holiday-item" key={date}>
-                      <span>{date}: {label}</span>
+                      <span>{displayText}</span>
                       <button
                         type="button"
                         className="holiday-remove"
@@ -750,9 +769,10 @@ function App() {
                 holidayList.map((item) => {
                   const date = typeof item === 'string' ? item : item.date;
                   const label = typeof item === 'string' ? 'Libur Nasional' : item.label;
+                  const displayText = formatHolidayText(date, label);
                   return (
                     <li className="holiday-item" key={date}>
-                      <span>{date}: {label}</span>
+                      <span>{displayText}</span>
                       <button
                         type="button"
                         className="holiday-remove"
