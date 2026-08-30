@@ -523,6 +523,28 @@ function App() {
      return [...new Set(dests)].sort();
   }, [data]);
 
+  const dashboardInsights = useMemo(() => {
+    const total = filteredData.length;
+    const lateShipping = filteredData.filter(item => item['Status Shipping'] === 'Late').length;
+    const lateGr = filteredData.filter(item => item['Status GR 101'] === 'Late').length;
+
+    const destinationCounts = filteredData.reduce((acc, item) => {
+      const destination = item['Destination'];
+      if (!destination || destination === '-' || destination === 'null' || destination === 'undefined') return acc;
+      acc[destination] = (acc[destination] || 0) + 1;
+      return acc;
+    }, {});
+
+    const topDestination = Object.entries(destinationCounts).sort((a, b) => b[1] - a[1])[0];
+
+    return {
+      total,
+      lateShipping,
+      lateGr,
+      topDestination: topDestination ? `${topDestination[0]} (${topDestination[1]})` : 'Belum ada data',
+      holidayCount: holidayList.length
+    };
+  }, [filteredData, holidayList]);
 
   if (loading) {
     return (
