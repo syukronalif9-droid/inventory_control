@@ -115,6 +115,7 @@ function App() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentView, setCurrentView] = useState('dashboard');
   const [holidayList, setHolidayList] = useState(defaultHolidayList);
   const [newHoliday, setNewHoliday] = useState('');
   const [rawData, setRawData] = useState([]);
@@ -505,169 +506,226 @@ function App() {
   return (
     <div className="app-container">
       <header className="app-header" style={{ marginBottom: '2rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+        <div className="title-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', gap: '1rem', flexWrap: 'wrap' }}>
           <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
+
+          <div className="page-switcher">
+            <button
+              type="button"
+              className={`tab-button ${currentView === 'dashboard' ? 'active' : ''}`}
+              onClick={() => setCurrentView('dashboard')}
+            >
+              Dashboard
+            </button>
+            <button
+              type="button"
+              className={`tab-button ${currentView === 'holidays' ? 'active' : ''}`}
+              onClick={() => setCurrentView('holidays')}
+            >
+              Daftar Libur Nasional
+            </button>
+          </div>
         </div>
-        
-        <div className="controls-bar" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-          
-          {/* Filters (Left Side) */}
-          <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', flex: 1, alignItems: 'center' }}>
-            {/* Date Range Filter */}
-            <div className="input-group date-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Calendar size={14} style={{ color: 'var(--gold)', flexShrink: 0 }} />
-              <CustomDateInput
-                value={startDate}
-                onChange={setStartDate}
-                title="Start Shipping Date"
-              />
-              <span style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>—</span>
-              <CustomDateInput
-                value={endDate}
-                onChange={setEndDate}
-                title="End Shipping Date"
-              />
+
+        {currentView === 'dashboard' && (
+          <div className="controls-bar" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
+            <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap', flex: 1, alignItems: 'center' }}>
+              <div className="input-group date-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Calendar size={14} style={{ color: 'var(--gold)', flexShrink: 0 }} />
+                <CustomDateInput
+                  value={startDate}
+                  onChange={setStartDate}
+                  title="Start Shipping Date"
+                />
+                <span style={{ color: 'var(--text-secondary)', fontWeight: 700 }}>—</span>
+                <CustomDateInput
+                  value={endDate}
+                  onChange={setEndDate}
+                  title="End Shipping Date"
+                />
+              </div>
+
+              <select 
+                value={statusGrFilter} 
+                onChange={e => setStatusGrFilter(e.target.value)}
+                className="input-group"
+              >
+                <option value="">Status GR</option>
+                <option value="SUDAH GR">Sudah GR</option>
+                <option value="BELUM GR">Belum GR</option>
+              </select>
+
+              <select 
+                value={statusFilter} 
+                onChange={e => setStatusFilter(e.target.value)}
+                className="input-group"
+              >
+                <option value="">Status TMR</option>
+                {statusOptions.map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+
+              <select 
+                value={matlGroupFilter} 
+                onChange={e => setMatlGroupFilter(e.target.value)}
+                className="input-group"
+              >
+                <option value="">Grup Matl</option>
+                <option value="Inventory">Inventory</option>
+                <option value="Expense">Expense (OB)</option>
+              </select>
+
+              <select 
+                value={destinationFilter} 
+                onChange={e => setDestinationFilter(e.target.value)}
+                className="input-group"
+                style={{ maxWidth: '200px' }}
+              >
+                <option value="">Tujuan</option>
+                {destinationOptions.map(opt => (
+                  <option key={opt} value={opt}>{opt}</option>
+                ))}
+              </select>
+
+              {(startDate || endDate || statusFilter || matlGroupFilter || statusGrFilter || destinationFilter) && (
+                <button 
+                  onClick={() => { setStartDate(''); setEndDate(''); setStatusFilter(''); setMatlGroupFilter(''); setStatusGrFilter(''); setDestinationFilter(''); }}
+                  className="icon-button danger"
+                  title="Hapus Filter"
+                  style={{ padding: '0.4rem' }}
+                >
+                  <X size={16} />
+                </button>
+              )}
             </div>
 
-            {/* Status GR Filter */}
-            <select 
-              value={statusGrFilter} 
-              onChange={e => setStatusGrFilter(e.target.value)}
-              className="input-group"
-            >
-              <option value="">Status GR</option>
-              <option value="SUDAH GR">Sudah GR</option>
-              <option value="BELUM GR">Belum GR</option>
-            </select>
-
-            {/* Status TMR Filter */}
-            <select 
-              value={statusFilter} 
-              onChange={e => setStatusFilter(e.target.value)}
-              className="input-group"
-            >
-              <option value="">Status TMR</option>
-              {statusOptions.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-
-            {/* Matl Group Filter */}
-            <select 
-              value={matlGroupFilter} 
-              onChange={e => setMatlGroupFilter(e.target.value)}
-              className="input-group"
-            >
-              <option value="">Grup Matl</option>
-              <option value="Inventory">Inventory</option>
-              <option value="Expense">Expense (OB)</option>
-            </select>
-
-            {/* Destination Filter */}
-            <select 
-              value={destinationFilter} 
-              onChange={e => setDestinationFilter(e.target.value)}
-              className="input-group"
-              style={{ maxWidth: '200px' }}
-            >
-              <option value="">Tujuan</option>
-              {destinationOptions.map(opt => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-
-            {(startDate || endDate || statusFilter || matlGroupFilter || statusGrFilter || destinationFilter) && (
+            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+              <input 
+                type="file" 
+                accept=".xlsx, .xls, .csv" 
+                style={{ display: 'none' }} 
+                ref={fileInputRef}
+                onChange={handleFileUpload}
+              />
               <button 
-                onClick={() => { setStartDate(''); setEndDate(''); setStatusFilter(''); setMatlGroupFilter(''); setStatusGrFilter(''); setDestinationFilter(''); }}
-                className="icon-button danger"
-                title="Hapus Filter"
-                style={{ padding: '0.4rem' }}
+                className="btn btn-upload"
+                onClick={() => fileInputRef.current?.click()}
               >
-                <X size={16} />
+                <UploadCloud size={16} />
+                <span>Unggah Data</span>
               </button>
-            )}
-          </div>
 
-          {/* Action Buttons (Right Side) */}
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <input 
-              type="file" 
-              accept=".xlsx, .xls, .csv" 
-              style={{ display: 'none' }} 
-              ref={fileInputRef}
-              onChange={handleFileUpload}
-            />
-            <button 
-              className="btn btn-upload"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <UploadCloud size={16} />
-              <span>Unggah Data</span>
-            </button>
-
-            <button 
-              className="btn btn-reset"
-              onClick={handleResetData}
-              title="Hapus Semua Data"
-            >
-              <Trash2 size={16} />
-              <span>Reset</span>
-            </button>
+              <button 
+                className="btn btn-reset"
+                onClick={handleResetData}
+                title="Hapus Semua Data"
+              >
+                <Trash2 size={16} />
+                <span>Reset</span>
+              </button>
+            </div>
           </div>
-        </div>
+        )}
       </header>
 
-      <main className="main-layout">
-        <div className="main-content">
-          <SummaryCards data={filteredData} />
-          
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-            <ShippingScoreCard data={filteredData} />
-            <GRScoreCard data={filteredData} />
+      {currentView === 'dashboard' ? (
+        <main className="main-layout">
+          <div className="main-content">
+            <SummaryCards data={filteredData} />
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+              <ShippingScoreCard data={filteredData} />
+              <GRScoreCard data={filteredData} />
+            </div>
+
+            <DataTable data={filteredData} />
           </div>
 
-          <DataTable data={filteredData} />
-        </div>
+          <aside className="holiday-sidebar glass-card">
+            <div className="holiday-header">
+              <h3>Daftar Libur Nasional</h3>
+            </div>
 
-        <aside className="holiday-sidebar glass-card">
-          <div className="holiday-header">
-            <h3>Daftar Libur Nasional</h3>
-          </div>
+            <div className="holiday-input-row">
+              <input
+                type="date"
+                value={newHoliday}
+                onChange={(e) => setNewHoliday(e.target.value)}
+                className="input-field holiday-date-input"
+              />
+              <button className="btn btn-small" onClick={addHoliday} type="button">
+                <Plus size={14} />
+                <span>Tambah</span>
+              </button>
+            </div>
 
-          <div className="holiday-input-row">
-            <input
-              type="date"
-              value={newHoliday}
-              onChange={(e) => setNewHoliday(e.target.value)}
-              className="input-field holiday-date-input"
-            />
-            <button className="btn btn-small" onClick={addHoliday} type="button">
-              <Plus size={14} />
-              <span>Tambah</span>
-            </button>
-          </div>
+            <ul className="holiday-list">
+              {holidayList.length === 0 ? (
+                <li className="holiday-empty">Belum ada tanggal libur</li>
+              ) : (
+                holidayList.map((date) => (
+                  <li className="holiday-item" key={date}>
+                    <span>{date}</span>
+                    <button
+                      type="button"
+                      className="holiday-remove"
+                      onClick={() => removeHoliday(date)}
+                      aria-label={`Hapus ${date}`}
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          </aside>
+        </main>
+      ) : (
+        <main className="holiday-page">
+          <section className="holiday-panel glass-card">
+            <div className="holiday-header-row">
+              <h2>Daftar Libur Nasional</h2>
+              <button type="button" className="btn" onClick={() => setCurrentView('dashboard')}>
+                Kembali ke Dashboard
+              </button>
+            </div>
 
-          <ul className="holiday-list">
-            {holidayList.length === 0 ? (
-              <li className="holiday-empty">Belum ada tanggal libur</li>
-            ) : (
-              holidayList.map((date) => (
-                <li className="holiday-item" key={date}>
-                  <span>{date}</span>
-                  <button
-                    type="button"
-                    className="holiday-remove"
-                    onClick={() => removeHoliday(date)}
-                    aria-label={`Hapus ${date}`}
-                  >
-                    <Trash2 size={12} />
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
-        </aside>
-      </main>
+            <div className="holiday-input-row holiday-input-row-large">
+              <input
+                type="date"
+                value={newHoliday}
+                onChange={(e) => setNewHoliday(e.target.value)}
+                className="input-field holiday-date-input"
+              />
+              <button className="btn btn-small" onClick={addHoliday} type="button">
+                <Plus size={14} />
+                <span>Tambah</span>
+              </button>
+            </div>
+
+            <ul className="holiday-list holiday-list-large">
+              {holidayList.length === 0 ? (
+                <li className="holiday-empty">Belum ada tanggal libur</li>
+              ) : (
+                holidayList.map((date) => (
+                  <li className="holiday-item" key={date}>
+                    <span>{date}</span>
+                    <button
+                      type="button"
+                      className="holiday-remove"
+                      onClick={() => removeHoliday(date)}
+                      aria-label={`Hapus ${date}`}
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  </li>
+                ))
+              )}
+            </ul>
+          </section>
+        </main>
+      )}
     </div>
   );
 }

@@ -74,6 +74,33 @@ body {
   padding: 3rem 2rem;
 }
 
+.page-switcher {
+  display: inline-flex;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  background: var(--bg-card);
+  border: 3px solid var(--border);
+  box-shadow: 4px 4px 0px var(--border);
+}
+
+.tab-button {
+  background: transparent;
+  border: 2px solid transparent;
+  color: var(--text-secondary);
+  padding: 0.7rem 1rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.tab-button.active {
+  background: var(--mint);
+  border-color: var(--border);
+  color: var(--text-primary);
+  box-shadow: 2px 2px 0px var(--border);
+}
+
 .main-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 300px;
@@ -83,6 +110,24 @@ body {
 
 .main-content {
   min-width: 0;
+}
+
+.holiday-page {
+  display: flex;
+  justify-content: center;
+}
+
+.holiday-panel {
+  width: min(720px, 100%);
+  padding: 1.5rem;
+}
+
+.holiday-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .holiday-sidebar {
