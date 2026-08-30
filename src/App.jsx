@@ -523,6 +523,23 @@ function App() {
      return [...new Set(dests)].sort();
   }, [data]);
 
+  const dashboardInsights = useMemo(() => {
+    const total = filteredData.length;
+    const lateShipping = filteredData.filter(item => item['Status Shipping'] === 'Late').length;
+    const lateGr = filteredData.filter(item => item['Status GR 101'] === 'Late').length;
+    const ontimeShipping = filteredData.filter(item => item['Status Shipping'] === 'Ontime').length;
+    const ontimeGr = filteredData.filter(item => item['Status GR 101'] === 'Ontime').length;
+
+    return {
+      total,
+      lateShipping,
+      lateGr,
+      ontimeShipping,
+      ontimeGr,
+      holidayCount: holidayList.length
+    };
+  }, [filteredData, holidayList]);
+
   if (loading) {
     return (
       <div className="loader-container">
@@ -678,6 +695,38 @@ function App() {
             </div>
 
             <DataTable data={filteredData} />
+
+            <section className="insight-panel glass-card">
+              <div className="insight-header">
+                <h3>Ringkasan Data</h3>
+              </div>
+              <div className="insight-grid">
+                <div className="insight-tile">
+                  <span className="insight-label">Total</span>
+                  <strong>{dashboardInsights.total}</strong>
+                </div>
+                <div className="insight-tile success">
+                  <span className="insight-label">Ontime Shipping</span>
+                  <strong>{dashboardInsights.ontimeShipping}</strong>
+                </div>
+                <div className="insight-tile warning">
+                  <span className="insight-label">Late Shipping</span>
+                  <strong>{dashboardInsights.lateShipping}</strong>
+                </div>
+                <div className="insight-tile success">
+                  <span className="insight-label">Ontime GR 101</span>
+                  <strong>{dashboardInsights.ontimeGr}</strong>
+                </div>
+                <div className="insight-tile warning">
+                  <span className="insight-label">Late GR 101</span>
+                  <strong>{dashboardInsights.lateGr}</strong>
+                </div>
+                <div className="insight-tile">
+                  <span className="insight-label">Libur Aktif</span>
+                  <strong>{dashboardInsights.holidayCount}</strong>
+                </div>
+              </div>
+            </section>
           </div>
         </main>
       ) : (
