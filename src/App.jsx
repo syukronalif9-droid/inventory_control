@@ -227,7 +227,7 @@ function App() {
       };
       
       const workDays = calculateWorkDays(mappedRow['Shipping Date'], mappedRow['GR Date TMR'], holidayDates);
-      mappedRow['Waktu Pengerjaan'] = workDays;
+      mappedRow['Performance Shipping TMR (Hari)'] = workDays;
       
       if (workDays === null) {
           mappedRow['Status Shipping'] = '-';
@@ -236,7 +236,7 @@ function App() {
       }
       
       const workDaysGR = calculateWorkDays(mappedRow['GR Date TMR'], mappedRow['Entry Date'], holidayDates);
-      mappedRow['Waktu GR 101'] = workDaysGR;
+      mappedRow['Performance GR (Hari)'] = workDaysGR;
       
       if (workDaysGR === null) {
           mappedRow['Status GR 101'] = '-';
