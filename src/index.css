@@ -145,9 +145,20 @@ body {
   display: flex;
   gap: 0.5rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.holiday-input-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: center;
 }
 
 .holiday-date-input {
+  min-width: 0;
+}
+
+.holiday-name-input {
   min-width: 0;
 }
 

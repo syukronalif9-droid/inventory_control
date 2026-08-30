@@ -89,22 +89,27 @@ const CustomDateInput = ({ value, onChange, title }) => {
 };
 
 const defaultHolidayList = [
-  '01/01/2026',
-  '02/01/2026',
-  '12/02/2026',
-  '03/03/2026',
-  '21/04/2026',
-  '01/05/2026',
-  '26/05/2026',
-  '17/08/2026',
-  '05/09/2026',
-  '25/12/2026'
+  { date: '01/01/2026', label: 'Tahun Baru' },
+  { date: '02/01/2026', label: 'Libur Tambahan' },
+  { date: '12/02/2026', label: 'Isra Mi\'raj' },
+  { date: '03/03/2026', label: 'Hari Raya Nyepi' },
+  { date: '21/04/2026', label: 'Idul Fitri' },
+  { date: '01/05/2026', label: 'Hari Buruh' },
+  { date: '26/05/2026', label: 'Kenaikan Isa Almasih' },
+  { date: '17/08/2026', label: 'Hari Kemerdekaan' },
+  { date: '05/09/2026', label: 'Maulid Nabi' },
+  { date: '25/12/2026', label: 'Natal' }
 ];
 
 const formatISODateToDDMMYYYY = (value) => {
   if (!value) return '';
-  const date = new Date(value);
+
+  const [year, month, day] = value.split('-').map(Number);
+  if (!year || !month || !day) return '';
+
+  const date = new Date(year, month - 1, day);
   if (Number.isNaN(date.getTime())) return '';
+
   const d = String(date.getDate()).padStart(2, '0');
   const m = String(date.getMonth() + 1).padStart(2, '0');
   const y = date.getFullYear();
@@ -118,6 +123,7 @@ function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [holidayList, setHolidayList] = useState(defaultHolidayList);
   const [newHoliday, setNewHoliday] = useState('');
+  const [newHolidayName, setNewHolidayName] = useState('');
   const [rawData, setRawData] = useState([]);
 
   const fileInputRef = useRef(null);
@@ -202,7 +208,7 @@ function App() {
         'Matl. Group': row.material_type
       };
       
-      const workDays = calculateWorkDays(mappedRow['Shipping Date'], mappedRow['GR Date TMR'], holidayList);
+      const workDays = calculateWorkDays(mappedRow['Shipping Date'], mappedRow['GR Date TMR'], holidayDates);
       mappedRow['Waktu Pengerjaan'] = workDays;
       
       if (workDays === null) {
@@ -211,7 +217,7 @@ function App() {
           mappedRow['Status Shipping'] = workDays > 2 ? 'Late' : 'Ontime';
       }
       
-      const workDaysGR = calculateWorkDays(mappedRow['GR Date TMR'], mappedRow['Entry Date'], holidayList);
+      const workDaysGR = calculateWorkDays(mappedRow['GR Date TMR'], mappedRow['Entry Date'], holidayDates);
       mappedRow['Waktu GR 101'] = workDaysGR;
       
       if (workDaysGR === null) {
@@ -383,27 +389,42 @@ function App() {
     }
   };
 
+  const holidayDates = useMemo(() =>
+    holidayList.map(item => (typeof item === 'string' ? item : item.date)),
+    [holidayList]
+  );
+
   const addHoliday = () => {
+    if (!newHoliday) {
+      alert('Pilih tanggal libur dulu sebelum menambahkan.');
+      return;
+    }
+
     const formatted = formatISODateToDDMMYYYY(newHoliday);
     if (!formatted) {
+      alert('Format tanggal tidak valid. Silakan pilih tanggal kembali.');
       return;
     }
 
-    if (holidayList.includes(formatted)) {
+    const label = newHolidayName.trim() || 'Libur Nasional';
+
+    if (holidayDates.includes(formatted)) {
       setNewHoliday('');
+      setNewHolidayName('');
       return;
     }
 
-    setHolidayList(prev => [...prev, formatted].sort((a, b) => {
-      const [dayA, monthA, yearA] = a.split('/').map(Number);
-      const [dayB, monthB, yearB] = b.split('/').map(Number);
+    setHolidayList(prev => [...prev, { date: formatted, label }].sort((a, b) => {
+      const [dayA, monthA, yearA] = (typeof a === 'string' ? a : a.date).split('/').map(Number);
+      const [dayB, monthB, yearB] = (typeof b === 'string' ? b : b.date).split('/').map(Number);
       return new Date(yearA, monthA - 1, dayA) - new Date(yearB, monthB - 1, dayB);
     }));
     setNewHoliday('');
+    setNewHolidayName('');
   };
 
   const removeHoliday = (date) => {
-    setHolidayList(prev => prev.filter(item => item !== date));
+    setHolidayList(prev => prev.filter(item => (typeof item === 'string' ? item : item.date) !== date));
   };
 
   const filteredData = useMemo(() => {
@@ -647,12 +668,19 @@ function App() {
               <h3>Daftar Libur Nasional</h3>
             </div>
 
-            <div className="holiday-input-row">
+            <div className="holiday-input-row holiday-input-stack">
               <input
                 type="date"
                 value={newHoliday}
                 onChange={(e) => setNewHoliday(e.target.value)}
                 className="input-field holiday-date-input"
+              />
+              <input
+                type="text"
+                value={newHolidayName}
+                onChange={(e) => setNewHolidayName(e.target.value)}
+                placeholder="Nama libur"
+                className="input-field holiday-name-input"
               />
               <button className="btn btn-small" onClick={addHoliday} type="button">
                 <Plus size={14} />
@@ -664,19 +692,23 @@ function App() {
               {holidayList.length === 0 ? (
                 <li className="holiday-empty">Belum ada tanggal libur</li>
               ) : (
-                holidayList.map((date) => (
-                  <li className="holiday-item" key={date}>
-                    <span>{date}</span>
-                    <button
-                      type="button"
-                      className="holiday-remove"
-                      onClick={() => removeHoliday(date)}
-                      aria-label={`Hapus ${date}`}
-                    >
-                      <Trash2 size={12} />
-                    </button>
-                  </li>
-                ))
+                holidayList.map((item) => {
+                  const date = typeof item === 'string' ? item : item.date;
+                  const label = typeof item === 'string' ? 'Libur Nasional' : item.label;
+                  return (
+                    <li className="holiday-item" key={date}>
+                      <span>{date}: {label}</span>
+                      <button
+                        type="button"
+                        className="holiday-remove"
+                        onClick={() => removeHoliday(date)}
+                        aria-label={`Hapus ${date}`}
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </li>
+                  );
+                })
               )}
             </ul>
           </aside>
@@ -691,12 +723,19 @@ function App() {
               </button>
             </div>
 
-            <div className="holiday-input-row holiday-input-row-large">
+            <div className="holiday-input-row holiday-input-row-large holiday-input-stack">
               <input
                 type="date"
                 value={newHoliday}
                 onChange={(e) => setNewHoliday(e.target.value)}
                 className="input-field holiday-date-input"
+              />
+              <input
+                type="text"
+                value={newHolidayName}
+                onChange={(e) => setNewHolidayName(e.target.value)}
+                placeholder="Nama libur"
+                className="input-field holiday-name-input"
               />
               <button className="btn btn-small" onClick={addHoliday} type="button">
                 <Plus size={14} />
@@ -708,19 +747,23 @@ function App() {
               {holidayList.length === 0 ? (
                 <li className="holiday-empty">Belum ada tanggal libur</li>
               ) : (
-                holidayList.map((date) => (
-                  <li className="holiday-item" key={date}>
-                    <span>{date}</span>
-                    <button
-                      type="button"
-                      className="holiday-remove"
-                      onClick={() => removeHoliday(date)}
-                      aria-label={`Hapus ${date}`}
-                    >
-                      <Trash2 size={12} />
-                    </button>
-                  </li>
-                ))
+                holidayList.map((item) => {
+                  const date = typeof item === 'string' ? item : item.date;
+                  const label = typeof item === 'string' ? 'Libur Nasional' : item.label;
+                  return (
+                    <li className="holiday-item" key={date}>
+                      <span>{date}: {label}</span>
+                      <button
+                        type="button"
+                        className="holiday-remove"
+                        onClick={() => removeHoliday(date)}
+                        aria-label={`Hapus ${date}`}
+                      >
+                        <Trash2 size={12} />
+                      </button>
+                    </li>
+                  );
+                })
               )}
             </ul>
           </section>
