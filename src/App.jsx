@@ -728,57 +728,6 @@ function App() {
               </div>
             </section>
           </div>
-
-          <aside className="results-sidebar glass-card">
-            <div className="results-header">
-              <h3>HASIL</h3>
-            </div>
-            <div className="results-content">
-              <div className="result-item">
-                <span className="result-label">Total Data</span>
-                <strong className="result-value">{dashboardInsights.total}</strong>
-              </div>
-              
-              <div className="result-divider"></div>
-              
-              <div className="result-item">
-                <span className="result-label">Shipping</span>
-              </div>
-              <div className="result-stat success">
-                <span>Ontime</span>
-                <strong>{dashboardInsights.ontimeShipping}</strong>
-                <span className="result-percent">{dashboardInsights.total > 0 ? Math.round((dashboardInsights.ontimeShipping / dashboardInsights.total) * 100) : 0}%</span>
-              </div>
-              <div className="result-stat warning">
-                <span>Late</span>
-                <strong>{dashboardInsights.lateShipping}</strong>
-                <span className="result-percent">{dashboardInsights.total > 0 ? Math.round((dashboardInsights.lateShipping / dashboardInsights.total) * 100) : 0}%</span>
-              </div>
-              
-              <div className="result-divider"></div>
-              
-              <div className="result-item">
-                <span className="result-label">GR 101</span>
-              </div>
-              <div className="result-stat success">
-                <span>Ontime</span>
-                <strong>{dashboardInsights.ontimeGr}</strong>
-                <span className="result-percent">{dashboardInsights.total > 0 ? Math.round((dashboardInsights.ontimeGr / dashboardInsights.total) * 100) : 0}%</span>
-              </div>
-              <div className="result-stat warning">
-                <span>Late</span>
-                <strong>{dashboardInsights.lateGr}</strong>
-                <span className="result-percent">{dashboardInsights.total > 0 ? Math.round((dashboardInsights.lateGr / dashboardInsights.total) * 100) : 0}%</span>
-              </div>
-              
-              <div className="result-divider"></div>
-              
-              <div className="result-item">
-                <span className="result-label">Libur Aktif</span>
-                <strong className="result-value">{dashboardInsights.holidayCount}</strong>
-              </div>
-            </div>
-          </aside>
         </main>
       ) : (
         <main className="holiday-page">
