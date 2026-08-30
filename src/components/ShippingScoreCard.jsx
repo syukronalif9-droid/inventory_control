@@ -35,7 +35,7 @@ export default function ShippingScoreCard({ data }) {
           <Truck size={20} />
         </div>
         <div>
-          <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 800, margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Tanggal Pengiriman TMR</h3>
+          <h3 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: 800, margin: 0, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Shipping TMR</h3>
         </div>
       </div>
 
