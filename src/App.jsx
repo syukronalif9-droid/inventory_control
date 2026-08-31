@@ -533,6 +533,10 @@ function App() {
       const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
       return matlGroup.includes('invent');
     }).length;
+    const totalExpense = filteredData.filter(item => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      return matlGroup.includes('expence') || matlGroup.includes('expense');
+    }).length;
 
     return {
       total,
@@ -541,6 +545,7 @@ function App() {
       ontimeShipping,
       ontimeGr,
       totalInventory,
+      totalExpense,
       holidayCount: holidayList.length
     };
   }, [filteredData, holidayList]);
@@ -715,8 +720,8 @@ function App() {
                   <strong>{dashboardInsights.totalInventory}</strong>
                 </div>
                 <div className="insight-tile warning">
-                  <span className="insight-label">Late Shipping</span>
-                  <strong>{dashboardInsights.lateShipping}</strong>
+                  <span className="insight-label">Total Expense (OB)</span>
+                  <strong>{dashboardInsights.totalExpense}</strong>
                 </div>
                 <div className="insight-tile success">
                   <span className="insight-label">Ontime GR 101</span>
