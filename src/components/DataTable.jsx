@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, X, Table } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, X, Database } from 'lucide-react';
 
 export default function DataTable({ data }) {
   const [searchTerm, setSearchTerm] = useState('');
@@ -77,7 +77,7 @@ export default function DataTable({ data }) {
     <div style={{ marginTop: '3rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.5rem' }}>
-          <Table size={24} style={{ color: 'var(--brand-blue)' }} />
+          <Database size={24} style={{ color: 'var(--brand-blue)' }} />
           Data Records <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>({filteredData.length.toLocaleString('id-ID')} Line)</span>
         </h2>
 
