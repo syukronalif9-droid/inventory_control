@@ -77,7 +77,7 @@ export default function DataTable({ data }) {
     <div style={{ marginTop: '3rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.5rem' }}>
-          <Database size={24} style={{ color: 'var(--brand-blue)' }} />
+          <Database size={24} style={{ color: '#10b981' }} />
           Data Records <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>({filteredData.length.toLocaleString('id-ID')} Line)</span>
         </h2>
 
@@ -123,7 +123,7 @@ export default function DataTable({ data }) {
           <tbody>
             {currentData.length > 0 ? (
               currentData.map((row, idx) => (
-                <tr key={idx} onClick={() => setSelectedRow(row)} style={{ cursor: 'pointer' }}>
+                <tr key={idx} onDoubleClick={() => setSelectedRow(row)} style={{ cursor: 'pointer' }}>
                   <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{row['TMR Number'] || '-'}</td>
                   <td style={{ fontFamily: 'monospace', color: 'var(--text-secondary)', textAlign: 'center' }}>{row['Purchasing Document'] || '-'}</td>
                   <td style={{ color: 'var(--text-secondary)' }}>{row['GR Date TMR'] || '-'}</td>
