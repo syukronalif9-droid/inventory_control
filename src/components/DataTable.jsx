@@ -111,6 +111,9 @@ export default function DataTable({ data }) {
               <th onClick={() => requestSort('Storage Location')} style={{ cursor: 'pointer', userSelect: 'none' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Storage Location {renderSortIcon('Storage Location')}</div>
               </th>
+              <th onClick={() => requestSort('Matl. Group')} style={{ cursor: 'pointer', userSelect: 'none' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Matl. Group {renderSortIcon('Matl. Group')}</div>
+              </th>
               <th onClick={() => requestSort('Status Keterangan GR')} style={{ cursor: 'pointer', userSelect: 'none' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Status Keterangan GR {renderSortIcon('Status Keterangan GR')}</div>
               </th>
@@ -126,12 +129,37 @@ export default function DataTable({ data }) {
                   <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#000000', fontWeight: 500 }} title={row['Storage Location']}>
                     {row['Storage Location'] || '-'}
                   </td>
-                  <td>{row['Status Keterangan GR'] || '-'}</td>
+                  <td style={{ maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#000000', fontWeight: 500 }} title={row['Matl. Group']}>
+                    {row['Matl. Group'] || '-'}
+                  </td>
+                  <td>
+                    {(() => {
+                      const status = String(row['Status Keterangan GR'] || '').trim();
+                      const isDone = status.toUpperCase() === 'SUDAH GR';
+
+                      return (
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            padding: '0.28rem 0.6rem',
+                            borderRadius: '999px',
+                            fontWeight: 700,
+                            background: isDone ? '#d1fae5' : '#fee2e2',
+                            color: isDone ? '#166534' : '#991b1b',
+                            border: `1px solid ${isDone ? '#86efac' : '#fca5a5'}`,
+                            textTransform: 'uppercase'
+                          }}
+                        >
+                          {status || '-'}
+                        </span>
+                      );
+                    })()}
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="5" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
+                <td colSpan="6" style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-secondary)' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
                     <Search size={48} style={{ opacity: 0.2 }} />
                     <p>No records found matching your filters</p>
