@@ -538,6 +538,26 @@ function App() {
       return matlGroup.includes('expence') || matlGroup.includes('expense');
     }).length;
 
+    const parseItemValue = value => {
+      const raw = String(value ?? '').trim();
+      if (!raw) return 0;
+      const normalized = raw.replace(/\s+/g, '').replace(/\./g, '').replace(',', '.');
+      const num = Number.parseFloat(normalized);
+      return Number.isFinite(num) ? num : 0;
+    };
+
+    const totalInventoryItems = filteredData.reduce((sum, item) => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      if (!matlGroup.includes('invent')) return sum;
+      return sum + parseItemValue(item['Item']);
+    }, 0);
+
+    const totalExpenseItems = filteredData.reduce((sum, item) => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      if (!(matlGroup.includes('expence') || matlGroup.includes('expense'))) return sum;
+      return sum + parseItemValue(item['Item']);
+    }, 0);
+
     return {
       total,
       lateShipping,
@@ -546,6 +566,8 @@ function App() {
       ontimeGr,
       totalInventory,
       totalExpense,
+      totalInventoryItems,
+      totalExpenseItems,
       holidayCount: holidayList.length
     };
   }, [filteredData, holidayList]);
@@ -724,12 +746,12 @@ function App() {
                   <strong>{dashboardInsights.totalExpense}</strong>
                 </div>
                 <div className="insight-tile success">
-                  <span className="insight-label">Ontime GR 101</span>
-                  <strong>{dashboardInsights.ontimeGr}</strong>
+                  <span className="insight-label">Total Item Inventory</span>
+                  <strong>{dashboardInsights.totalInventoryItems.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile warning">
-                  <span className="insight-label">Late GR 101</span>
-                  <strong>{dashboardInsights.lateGr}</strong>
+                  <span className="insight-label">Total Item Expense (OB)</span>
+                  <strong>{dashboardInsights.totalExpenseItems.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile">
                   <span className="insight-label">Libur Aktif</span>
