@@ -529,6 +529,10 @@ function App() {
     const lateGr = filteredData.filter(item => item['Status GR 101'] === 'Late').length;
     const ontimeShipping = filteredData.filter(item => item['Status Shipping'] === 'Ontime').length;
     const ontimeGr = filteredData.filter(item => item['Status GR 101'] === 'Ontime').length;
+    const totalInventory = filteredData.filter(item => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      return matlGroup.includes('invent');
+    }).length;
 
     return {
       total,
@@ -536,6 +540,7 @@ function App() {
       lateGr,
       ontimeShipping,
       ontimeGr,
+      totalInventory,
       holidayCount: holidayList.length
     };
   }, [filteredData, holidayList]);
@@ -706,8 +711,8 @@ function App() {
                   <strong>{dashboardInsights.total}</strong>
                 </div>
                 <div className="insight-tile success">
-                  <span className="insight-label">Ontime Shipping</span>
-                  <strong>{dashboardInsights.ontimeShipping}</strong>
+                  <span className="insight-label">Total Inventory</span>
+                  <strong>{dashboardInsights.totalInventory}</strong>
                 </div>
                 <div className="insight-tile warning">
                   <span className="insight-label">Late Shipping</span>
