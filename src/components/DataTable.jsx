@@ -225,8 +225,8 @@ export default function DataTable({ data }) {
               <X size={24} />
             </button>
 
-            <h2 style={{ marginBottom: '1.5rem', color: 'var(--text-primary)', borderBottom: '1px solid var(--border-light)', paddingBottom: '1rem' }}>
-              Detail TMR: <span className="text-gradient">{selectedRow['TMR Number'] || 'N/A'}</span>
+            <h2 style={{ marginBottom: '1.5rem', color: '#000000', borderBottom: '1px solid var(--border-light)', paddingBottom: '1rem' }}>
+              Detail TMR: <span style={{ color: '#000000' }}>{selectedRow['TMR Number'] || 'N/A'}</span>
             </h2>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
