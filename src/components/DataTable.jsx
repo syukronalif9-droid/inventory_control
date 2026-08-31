@@ -77,7 +77,7 @@ export default function DataTable({ data }) {
     <div style={{ marginTop: '3rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.5rem' }}>
-          Data Records <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>({totalItemCount.toLocaleString('id-ID')} Total Item)</span>
+          Jumlah Baris <span style={{ fontSize: '1rem', color: 'var(--text-secondary)' }}>({filteredData.length.toLocaleString('id-ID')} Baris)</span>
         </h2>
 
         <div className="controls-bar">
