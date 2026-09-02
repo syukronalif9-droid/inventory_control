@@ -594,7 +594,7 @@ function App() {
     <div className="app-container">
       <header className="app-header" style={{ marginBottom: '2rem' }}>
         <div className="title-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', gap: '1rem', flexWrap: 'wrap' }}>
-          <div style={{ flex: 1 }} />
+          <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
 
           <div className="page-switcher">
             <button
