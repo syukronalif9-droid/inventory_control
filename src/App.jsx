@@ -738,11 +738,11 @@ function App() {
                   <strong>{dashboardInsights.total}</strong>
                 </div>
                 <div className="insight-tile success">
-                  <span className="insight-label">Total Inventory</span>
+                  <span className="insight-label">Total line Inventory</span>
                   <strong>{dashboardInsights.totalInventory}</strong>
                 </div>
                 <div className="insight-tile warning">
-                  <span className="insight-label">Total Expense (OB)</span>
+                  <span className="insight-label">Total line Expense (OB)</span>
                   <strong>{dashboardInsights.totalExpense}</strong>
                 </div>
                 <div className="insight-tile success">
