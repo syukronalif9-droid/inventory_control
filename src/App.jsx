@@ -745,14 +745,7 @@ function App() {
                   <span className="insight-label">Total line Expense (OB)</span>
                   <strong>{dashboardInsights.totalExpense}</strong>
                 </div>
-                <div className="insight-tile success">
-                  <span className="insight-label">Total Item Inventory</span>
-                  <strong>{dashboardInsights.totalInventoryItems.toLocaleString('id-ID')}</strong>
-                </div>
-                <div className="insight-tile warning">
-                  <span className="insight-label">Total Item Expense (OB)</span>
-                  <strong>{dashboardInsights.totalExpenseItems.toLocaleString('id-ID')}</strong>
-                </div>
+
                 <div className="insight-tile">
                   <span className="insight-label">Libur Aktif</span>
                   <strong>{dashboardInsights.holidayCount}</strong>
