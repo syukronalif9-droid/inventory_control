@@ -113,7 +113,9 @@ const Login = ({ onLogin }) => {
             <label htmlFor="username">Username</label>
             <input 
               type="text" 
-              id="username" 
+              id="username"
+              name="username"
+              autoComplete="username" 
               placeholder="Masukkan username" 
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -125,7 +127,9 @@ const Login = ({ onLogin }) => {
             <div className="password-input-wrapper">
               <input 
                 type={showPassword ? "text" : "password"} 
-                id="password" 
+                id="password"
+                name="password"
+                autoComplete="current-password"
                 placeholder="Masukkan kata sandi" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
