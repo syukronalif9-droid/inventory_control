@@ -111,33 +111,33 @@ const Login = ({ onLogin }) => {
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label htmlFor="username">Username</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               id="username"
               name="username"
-              autoComplete="username" 
-              placeholder="Masukkan username" 
+              autoComplete="username"
+              placeholder="Masukkan username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required 
+              required
             />
           </div>
           <div className="input-group">
             <label htmlFor="password">Kata Sandi</label>
             <div className="password-input-wrapper">
-              <input 
-                type={showPassword ? "text" : "password"} 
+              <input
+                type={showPassword ? "text" : "password"}
                 id="password"
                 name="password"
                 autoComplete="current-password"
-                placeholder="Masukkan kata sandi" 
+                placeholder="Masukkan kata sandi"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required 
+                required
               />
-              <button 
-                type="button" 
-                className="toggle-password" 
+              <button
+                type="button"
+                className="toggle-password"
                 onClick={() => setShowPassword(!showPassword)}
                 aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
               >
@@ -145,9 +145,9 @@ const Login = ({ onLogin }) => {
               </button>
             </div>
           </div>
-          
+
           {errorMsg && <p style={{ color: '#ef4444', fontSize: '12px', marginBottom: '10px' }}>{errorMsg}</p>}
-          
+
           <button className="btn-login" type="submit" disabled={loading}>
             {loading ? 'Loading...' : 'Login'}
           </button>

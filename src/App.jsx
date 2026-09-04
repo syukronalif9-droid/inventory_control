@@ -810,9 +810,9 @@ function App() {
                 <h3>Ringkasan Data</h3>
               </div>
               <div className="insight-grid">
-                <div className="insight-tile">
+                <div className="insight-tile" style={{ gridColumn: '1 / -1', background: 'var(--bg-card)' }}>
                   <span className="insight-label">Total</span>
-                  <strong>{dashboardInsights.total}</strong>
+                  <strong style={{ fontSize: '1.5rem' }}>{dashboardInsights.total}</strong>
                 </div>
                 <div className="insight-tile success">
                   <span className="insight-label">Total line Inventory</span>
