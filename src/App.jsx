@@ -828,9 +828,6 @@ function App() {
           <section className="holiday-panel glass-card">
             <div className="holiday-header-row">
               <h2>Daftar Libur Nasional</h2>
-              <button type="button" className="btn" onClick={() => setCurrentView('dashboard')}>
-                Kembali ke Dashboard
-              </button>
             </div>
 
             <div className="holiday-input-row holiday-input-row-large holiday-input-stack">
