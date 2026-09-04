@@ -810,16 +810,16 @@ function App() {
                 <h3>Ringkasan Data</h3>
               </div>
               <div className="insight-grid">
-                <div className="insight-tile" style={{ gridColumn: '1 / -1', background: 'var(--bg-card)' }}>
+                <div className="insight-tile">
                   <span className="insight-label">Total</span>
-                  <strong style={{ fontSize: '1.5rem' }}>{dashboardInsights.total}</strong>
+                  <strong>{dashboardInsights.total}</strong>
                 </div>
                 <div className="insight-tile success">
-                  <span className="insight-label">Total line Inventory</span>
+                  <span className="insight-label">Total<br />line Inventory</span>
                   <strong>{dashboardInsights.totalInventory}</strong>
                 </div>
                 <div className="insight-tile warning">
-                  <span className="insight-label">Total line Expense (OB)</span>
+                  <span className="insight-label">Total<br />line Expense (OB)</span>
                   <strong>{dashboardInsights.totalExpense}</strong>
                 </div>
 
