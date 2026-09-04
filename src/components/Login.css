@@ -79,6 +79,35 @@
   border-color: #38bdf8;
 }
 
+.login-card .password-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-card .password-input-wrapper input {
+  padding-right: 40px;
+}
+
+.login-card .toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+  outline: none;
+}
+
+.login-card .toggle-password:hover {
+  color: #ffffff;
+}
+
 .login-card .btn-login {
   width: 100%;
   padding: 11px;
