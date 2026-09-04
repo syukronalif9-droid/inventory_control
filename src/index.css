@@ -133,6 +133,82 @@ body {
   margin-bottom: 1rem;
 }
 
+.active-holiday-card {
+  position: relative;
+  width: 148px;
+  height: 112px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  background: var(--bg-card);
+  border-radius: 0 0 24px 24px;
+  box-shadow: 3px 3px 0 var(--border);
+}
+
+.active-holiday-top {
+  height: 43px;
+  background: #d23838;
+  border-radius: 22px 22px 0 0;
+}
+
+.active-holiday-rings {
+  position: absolute;
+  z-index: 2;
+  top: -8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 25px;
+}
+
+.active-holiday-rings span {
+  width: 20px;
+  height: 37px;
+  background: #d23838;
+  border: 2px solid #a82b2b;
+  border-top: 0;
+  border-radius: 0 0 14px 14px;
+}
+
+.active-holiday-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+  padding: 13px 20px 0;
+}
+
+.active-holiday-grid span {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 5px;
+  background: #e8e8e8;
+}
+
+.active-holiday-grid span.marked {
+  background: #d23838;
+}
+
+.active-holiday-copy {
+  position: absolute;
+  right: 7px;
+  bottom: 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 2px 5px;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--text-primary);
+  font-size: 0.58rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.active-holiday-copy strong {
+  color: #d23838;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
 .holiday-sidebar {
   position: sticky;
   top: 1rem;
