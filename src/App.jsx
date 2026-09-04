@@ -800,23 +800,23 @@ function App() {
                 <div className="insight-tile success" style={{ borderLeft: '4px solid #10b981' }}>
                   <span className="insight-category">Inventory</span>
                   <span className="insight-label">QTY TMR Sudah GR</span>
-                  <strong>{dashboardInsights.totalQtyInventorySudahGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value sudah-gr">{dashboardInsights.totalQtyInventorySudahGr.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile danger" style={{ borderLeft: '4px solid #ef4444' }}>
                   <span className="insight-category">Inventory</span>
                   <span className="insight-label">QTY TMR Belum GR</span>
-                  <strong>{dashboardInsights.totalQtyInventoryBelumGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value belum-gr">{dashboardInsights.totalQtyInventoryBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
 
                 <div className="insight-tile success" style={{ borderLeft: '4px solid #f59e0b', background: 'var(--bg-inset)' }}>
                   <span className="insight-category">Expense (OB)</span>
                   <span className="insight-label">QTY TMR Sudah GR</span>
-                  <strong>{dashboardInsights.totalQtyExpenseSudahGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value sudah-gr">{dashboardInsights.totalQtyExpenseSudahGr.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile danger" style={{ borderLeft: '4px solid #ef4444', background: 'var(--bg-inset)' }}>
                   <span className="insight-category">Expense (OB)</span>
                   <span className="insight-label">QTY TMR Belum GR</span>
-                  <strong>{dashboardInsights.totalQtyExpenseBelumGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value belum-gr">{dashboardInsights.totalQtyExpenseBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
 
 
