@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150" width="100%" height="100%">
+  <!-- Leaves and circle -->
+  <path d="M 230 40 Q 210 20 220 50 Q 240 70 250 40 Q 260 10 230 40 Z" fill="#eab308" /> <!-- orange/yellow -->
+  <path d="M 270 30 Q 250 10 260 40 Q 270 60 280 40 Q 290 20 270 30 Z" fill="#84cc16" /> <!-- light green -->
+  <path d="M 290 50 Q 280 30 290 60 Q 300 80 310 60 Q 320 40 290 50 Z" fill="#bef264" /> <!-- lighter green -->
+  <circle cx="280" cy="80" r="12" fill="#0ea5e9" /> <!-- blue circle -->
+  
+  <!-- GGF Text -->
+  <text x="80" y="100" font-family="Arial, sans-serif" font-weight="900" font-size="80" fill="#166534" letter-spacing="-2">GGF</text>
+  
+  <!-- Subtext -->
+  <text x="250" y="80" font-family="Arial, sans-serif" font-weight="bold" font-size="16" fill="#166534">GREAT</text>
+  <text x="250" y="100" font-family="Arial, sans-serif" font-weight="bold" font-size="16" fill="#166534">GIANT</text>
+  <text x="250" y="120" font-family="Arial, sans-serif" font-weight="bold" font-size="16" fill="#166534">FOODS</text>
+</svg>
