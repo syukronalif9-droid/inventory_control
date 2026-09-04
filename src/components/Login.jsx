@@ -33,57 +33,54 @@ const Login = ({ onLogin }) => {
         {errorMsg && <div className="error-message">{errorMsg}</div>}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-layout">
-            <div className="form-inputs">
-              <div className="input-group">
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  autoComplete="username"
-                  placeholder="sukron.setiawan"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="input-group">
-                <div className="password-input-wrapper">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    id="password"
-                    name="password"
-                    autoComplete="current-password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="checkbox-group">
-                <label>
-                  <input type="checkbox" name="remember" defaultChecked />
-                  Ingat username
-                </label>
-              </div>
-
-              <button className="btn-login" type="submit" disabled={loading}>
-                Masuk
+          <div className="input-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              autoComplete="username"
+              placeholder="Masukkan username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+          </div>
+          
+          <div className="input-group">
+            <label htmlFor="password">Kata Sandi</label>
+            <div className="password-input-wrapper">
+              <input
+                type={showPassword ? "text" : "password"}
+                id="password"
+                name="password"
+                autoComplete="current-password"
+                placeholder="Masukkan kata sandi"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="toggle-password"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"}
+              >
+                <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
               </button>
             </div>
-            
-            <div className="form-links">
-              <a href="#">Lupa nama pengguna dan kata sandi Anda?</a>
-              <p className="cookie-text">
-                Kuki harus diaktifkan pada peramban Anda 
-                <a href="#" style={{display: 'inline', marginLeft: '4px', color: '#1976d2', fontWeight: 'bold'}} aria-label="Bantuan Kuki">
-                  <i className="fas fa-question-circle" style={{ fontSize: '12px' }}></i>
-                </a>
-              </p>
-            </div>
           </div>
+
+          <div className="checkbox-group">
+            <label>
+              <input type="checkbox" name="remember" defaultChecked />
+              Ingat username
+            </label>
+          </div>
+
+          <button className="btn-login" type="submit" disabled={loading}>
+            Masuk
+          </button>
         </form>
       </div>
     </div>
