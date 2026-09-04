@@ -825,21 +825,9 @@ function App() {
           <section className="holiday-panel glass-card">
             <div className="holiday-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
               <h2 style={{ margin: 0 }}>Daftar Libur Nasional</h2>
-              <div className="active-holiday-card" aria-label={`${holidayList.length} libur aktif`}>
-                <div className="active-holiday-rings" aria-hidden="true">
-                  <span></span>
-                  <span></span>
-                </div>
-                <div className="active-holiday-top" aria-hidden="true"></div>
-                <div className="active-holiday-grid" aria-hidden="true">
-                  {Array.from({ length: 12 }, (_, index) => (
-                    <span key={index} className={index === 5 || index === 6 || index === 9 ? 'marked' : ''}></span>
-                  ))}
-                </div>
-                <div className="active-holiday-copy">
-                  <span>Libur Aktif</span>
-                  <strong>{holidayList.length}</strong>
-                </div>
+              <div className="active-holiday-count" aria-label={`${holidayList.length} libur aktif`}>
+                <span>Libur Aktif</span>
+                <strong>{holidayList.length}</strong>
               </div>
             </div>
 
