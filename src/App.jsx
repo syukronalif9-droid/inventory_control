@@ -811,7 +811,7 @@ function App() {
               </div>
               <div className="insight-grid">
                 <div className="insight-tile">
-                  <span className="insight-label">Total</span>
+                  <span className="insight-label">Total<br />line Inventory & Expense (OB)</span>
                   <strong>{dashboardInsights.total}</strong>
                 </div>
                 <div className="insight-tile success">
