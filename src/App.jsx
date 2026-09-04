@@ -815,10 +815,7 @@ function App() {
                   <strong>{dashboardInsights.totalQtyExpenseBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
 
-                <div className="insight-tile">
-                  <span className="insight-label">Libur Aktif</span>
-                  <strong>{dashboardInsights.holidayCount}</strong>
-                </div>
+
               </div>
             </section>
           </div>
@@ -827,7 +824,7 @@ function App() {
         <main className="holiday-page">
           <section className="holiday-panel glass-card">
             <div className="holiday-header-row">
-              <h2>Daftar Libur Nasional</h2>
+              <h2>Daftar Libur Nasional <span style={{ fontSize: '1rem', fontWeight: 'normal', color: 'var(--text-secondary)' }}>({holidayList.length} Hari Aktif)</span></h2>
             </div>
 
             <div className="holiday-input-row holiday-input-row-large holiday-input-stack">
