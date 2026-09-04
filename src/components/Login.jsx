@@ -3,8 +3,8 @@ import { supabase } from '../supabaseClient';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('Inventory');
-  const [password, setPassword] = useState('Maganghub26');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
