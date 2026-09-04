@@ -336,7 +336,29 @@ function App() {
           return cleanedRow;
         });
 
-        // 1. Append data (no deletion of previous data)
+        // 1. Delete existing data for the dates present in the uploaded file to prevent duplicates
+        const datesInFile = [...new Set(cleanedData.map(row => row.shipping_date).filter(Boolean))];
+        
+        if (datesInFile.length > 0) {
+            const dateChunkSize = 100;
+            for (let i = 0; i < datesInFile.length; i += dateChunkSize) {
+                const dateChunk = datesInFile.slice(i, i + dateChunkSize);
+                const { error: deleteError } = await supabase
+                    .from('inventory_records')
+                    .delete()
+                    .in('shipping_date', dateChunk);
+                
+                if (deleteError) {
+                    console.error('Delete error', deleteError);
+                    alert('Error menghapus data lama: ' + deleteError.message);
+                    setLoading(false);
+                    if (fileInputRef.current) fileInputRef.current.value = '';
+                    return;
+                }
+            }
+        }
+
+        // 2. Insert new data
         const chunkSize = 500;
         for (let i = 0; i < cleanedData.length; i += chunkSize) {
           const chunk = cleanedData.slice(i, i + chunkSize);
@@ -345,6 +367,7 @@ function App() {
              console.error('Insert error chunk', i, insertError);
              alert('Error menyimpan data: ' + insertError.message);
              setLoading(false);
+             if (fileInputRef.current) fileInputRef.current.value = '';
              return; // abort
           }
         }
