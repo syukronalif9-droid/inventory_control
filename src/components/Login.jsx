@@ -3,9 +3,8 @@ import { supabase } from '../supabaseClient';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('Inventory');
+  const [password, setPassword] = useState('Maganghub26');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -91,20 +90,16 @@ const Login = ({ onLogin }) => {
     setLoading(true);
     setErrorMsg('');
 
-    if (isLogin) {
-      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-      if (error) setErrorMsg(error.message);
-      else if (data.session) onLogin(data.session);
-    } else {
-      const { error } = await supabase.auth.signUp({ email, password });
-      if (error) {
-        setErrorMsg(error.message);
+    // Simulate API call delay for effect
+    setTimeout(() => {
+      if (username === 'Inventory' && password === 'Maganghub26') {
+        sessionStorage.setItem('isAuthenticated', 'true');
+        onLogin(true);
       } else {
-        alert("Registration successful! You can now log in.");
-        setIsLogin(true);
+        setErrorMsg('Username atau password salah');
       }
-    }
-    setLoading(false);
+      setLoading(false);
+    }, 800);
   };
 
   return (
@@ -112,16 +107,16 @@ const Login = ({ onLogin }) => {
       <canvas id="fireflies" ref={canvasRef}></canvas>
 
       <div className="login-card">
-        <h2>{isLogin ? 'Masuk Akun' : 'Daftar Akun'}</h2>
+        <h2>Masuk Akun</h2>
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="username">Username</label>
             <input 
-              type="email" 
-              id="email" 
-              placeholder="Masukkan email" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text" 
+              id="username" 
+              placeholder="Masukkan username" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required 
             />
           </div>
@@ -150,27 +145,9 @@ const Login = ({ onLogin }) => {
           {errorMsg && <p style={{ color: '#ef4444', fontSize: '12px', marginBottom: '10px' }}>{errorMsg}</p>}
           
           <button className="btn-login" type="submit" disabled={loading}>
-            {loading ? 'Loading...' : (isLogin ? 'Login' : 'Daftar')}
+            {loading ? 'Loading...' : 'Login'}
           </button>
         </form>
-
-        <div className="divider">
-          <span>atau login dengan</span>
-        </div>
-
-        <div className="social-login">
-          <button className="social-btn" id="google"><i className="fab fa-google"></i></button>
-          <button className="social-btn" id="facebook"><i className="fab fa-facebook-f"></i></button>
-          <button className="social-btn" id="github"><i className="fab fa-github"></i></button>
-        </div>
-
-        <div className="extra">
-          {isLogin ? (
-            <p>Belum punya akun? <a href="#" onClick={(e) => { e.preventDefault(); setIsLogin(false); }}>Daftar Sekarang</a></p>
-          ) : (
-            <p>Sudah punya akun? <a href="#" onClick={(e) => { e.preventDefault(); setIsLogin(true); }}>Login Sekarang</a></p>
-          )}
-        </div>
       </div>
     </div>
   );

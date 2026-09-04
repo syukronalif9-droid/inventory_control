@@ -140,17 +140,10 @@ function App() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
+    const isAuth = sessionStorage.getItem('isAuthenticated');
+    if (isAuth) {
+      setSession(true);
+    }
   }, []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -669,7 +662,10 @@ function App() {
             <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
             <button 
               className="icon-button danger" 
-              onClick={() => supabase.auth.signOut()} 
+              onClick={() => {
+                sessionStorage.removeItem('isAuthenticated');
+                setSession(null);
+              }} 
               title="Logout"
               style={{ padding: '0.4rem', borderRadius: '50%' }}
             >
