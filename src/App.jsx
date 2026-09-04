@@ -581,6 +581,30 @@ function App() {
       return sum + parseItemValue(item['Item']);
     }, 0);
 
+    const totalQtyInventorySudahGr = filteredData.reduce((sum, item) => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      if (!matlGroup.includes('invent')) return sum;
+      return sum + (Number(item['JUMLAH GR']) || 0);
+    }, 0);
+
+    const totalQtyInventoryBelumGr = filteredData.reduce((sum, item) => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      if (!matlGroup.includes('invent')) return sum;
+      return sum + (Number(item['Belum GR']) || 0);
+    }, 0);
+
+    const totalQtyExpenseSudahGr = filteredData.reduce((sum, item) => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      if (!(matlGroup.includes('expence') || matlGroup.includes('expense'))) return sum;
+      return sum + (Number(item['JUMLAH GR']) || 0);
+    }, 0);
+
+    const totalQtyExpenseBelumGr = filteredData.reduce((sum, item) => {
+      const matlGroup = String(item['Matl. Group'] || '').trim().toLowerCase();
+      if (!(matlGroup.includes('expence') || matlGroup.includes('expense'))) return sum;
+      return sum + (Number(item['Belum GR']) || 0);
+    }, 0);
+
     return {
       total,
       lateShipping,
@@ -591,6 +615,10 @@ function App() {
       totalExpense,
       totalInventoryItems,
       totalExpenseItems,
+      totalQtyInventorySudahGr,
+      totalQtyInventoryBelumGr,
+      totalQtyExpenseSudahGr,
+      totalQtyExpenseBelumGr,
       holidayCount: holidayList.length
     };
   }, [filteredData, holidayList]);
@@ -767,6 +795,24 @@ function App() {
                 <div className="insight-tile warning">
                   <span className="insight-label">Total line Expense (OB)</span>
                   <strong>{dashboardInsights.totalExpense}</strong>
+                </div>
+
+                <div className="insight-tile success" style={{ borderLeft: '4px solid #10b981' }}>
+                  <span className="insight-label">Inventory: QTY Sudah GR</span>
+                  <strong>{dashboardInsights.totalQtyInventorySudahGr.toLocaleString('id-ID')}</strong>
+                </div>
+                <div className="insight-tile danger" style={{ borderLeft: '4px solid #ef4444' }}>
+                  <span className="insight-label">Inventory: QTY Belum GR</span>
+                  <strong>{dashboardInsights.totalQtyInventoryBelumGr.toLocaleString('id-ID')}</strong>
+                </div>
+
+                <div className="insight-tile success" style={{ borderLeft: '4px solid #f59e0b', background: 'var(--bg-inset)' }}>
+                  <span className="insight-label">Expense (OB): QTY Sudah GR</span>
+                  <strong>{dashboardInsights.totalQtyExpenseSudahGr.toLocaleString('id-ID')}</strong>
+                </div>
+                <div className="insight-tile danger" style={{ borderLeft: '4px solid #ef4444', background: 'var(--bg-inset)' }}>
+                  <span className="insight-label">Expense (OB): QTY Belum GR</span>
+                  <strong>{dashboardInsights.totalQtyExpenseBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
 
                 <div className="insight-tile">
