@@ -798,20 +798,20 @@ function App() {
                 </div>
 
                 <div className="insight-tile success" style={{ borderLeft: '4px solid #10b981' }}>
-                  <span className="insight-label">Inventory: QTY Sudah GR</span>
+                  <span className="insight-label">Inventory: QTY TMR Sudah GR</span>
                   <strong>{dashboardInsights.totalQtyInventorySudahGr.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile danger" style={{ borderLeft: '4px solid #ef4444' }}>
-                  <span className="insight-label">Inventory: QTY Belum GR</span>
+                  <span className="insight-label">Inventory: QTY TMR Belum GR</span>
                   <strong>{dashboardInsights.totalQtyInventoryBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
 
                 <div className="insight-tile success" style={{ borderLeft: '4px solid #f59e0b', background: 'var(--bg-inset)' }}>
-                  <span className="insight-label">Expense (OB): QTY Sudah GR</span>
+                  <span className="insight-label">Expense (OB): QTY TMR Sudah GR</span>
                   <strong>{dashboardInsights.totalQtyExpenseSudahGr.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile danger" style={{ borderLeft: '4px solid #ef4444', background: 'var(--bg-inset)' }}>
-                  <span className="insight-label">Expense (OB): QTY Belum GR</span>
+                  <span className="insight-label">Expense (OB): QTY TMR Belum GR</span>
                   <strong>{dashboardInsights.totalQtyExpenseBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
 
