@@ -10,8 +10,8 @@
 
 .login-card {
   width: 100%;
-  max-width: 380px;
-  padding: 40px 30px;
+  max-width: 340px;
+  padding: 20px 24px 32px 24px;
   background: #ffffff;
   border: 1px solid #e5e7eb;
   color: #333333;
@@ -19,8 +19,8 @@
 
 .login-logo {
   display: block;
-  margin: 0 auto 30px;
-  max-width: 250px;
+  margin: -10px auto 10px;
+  max-width: 220px;
   height: auto;
 }
 
