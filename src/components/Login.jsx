@@ -28,7 +28,7 @@ const Login = ({ onLogin }) => {
   return (
     <div className="login-wrapper">
       <div className="login-card">
-        <img src="/kisspng-dairy-farm-pt-great-giant-livestock-food-business-5b2f6026a50078.0577139015298314626759.jpg" alt="Logo Great Giant Foods" className="login-logo" style={{ maxWidth: '350px', height: 'auto' }} />
+        <img src="/ggf-logo.png" alt="Logo Great Giant Foods" className="login-logo" style={{ maxWidth: '300px', height: 'auto' }} />
         
         {errorMsg && <div className="error-message">{errorMsg}</div>}
 
