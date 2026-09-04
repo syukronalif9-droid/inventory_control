@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Calendar, X, UploadCloud, DownloadCloud, Trash2, Plus } from 'lucide-react';
+import { Calendar, X, UploadCloud, DownloadCloud, Trash2, Plus, LogOut } from 'lucide-react';
 import { read, utils, writeFile } from 'xlsx';
 import { supabase } from './supabaseClient';
 
@@ -7,6 +7,7 @@ import SummaryCards from './components/SummaryCards';
 import ShippingScoreCard from './components/ShippingScoreCard';
 import GRScoreCard from './components/GRScoreCard';
 import DataTable from './components/DataTable';
+import Login from './components/Login';
 import { calculateWorkDays } from './utils/dateUtils';
 
 function formatToDDMMYYYY(val) {
@@ -135,7 +136,22 @@ const formatHolidayText = (dateString, label) => {
 };
 
 function App() {
+  const [session, setSession] = useState(null);
   const [data, setData] = useState([]);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentView, setCurrentView] = useState('dashboard');
@@ -641,11 +657,25 @@ function App() {
     );
   }
 
+  if (!session) {
+    return <Login onLogin={setSession} />;
+  }
+
   return (
     <div className="app-container">
       <header className="app-header" style={{ marginBottom: '2rem' }}>
         <div className="title-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', gap: '1rem', flexWrap: 'wrap' }}>
-          <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
+            <button 
+              className="icon-button danger" 
+              onClick={() => supabase.auth.signOut()} 
+              title="Logout"
+              style={{ padding: '0.4rem', borderRadius: '50%' }}
+            >
+              <LogOut size={16} />
+            </button>
+          </div>
 
           <div className="page-switcher">
             <button
