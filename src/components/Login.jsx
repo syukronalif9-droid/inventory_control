@@ -1,114 +1,164 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
-  const [isRightPanelActive, setIsRightPanelActive] = useState(false);
-  
+  const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const canvasRef = useRef(null);
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setErrorMsg('');
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
-    
-    if (error) {
-      setErrorMsg(error.message);
-    } else {
-      alert("Registration successful! You can now log in.");
-      setIsRightPanelActive(false); // switch to login
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    class Firefly {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 2 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.8;
+        this.speedY = (Math.random() - 0.5) * 0.8;
+        this.alpha = Math.random();
+        this.alphaSpeed = Math.random() * 0.02 + 0.005;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        this.alpha += this.alphaSpeed;
+
+        if (this.alpha <= 0.1 || this.alpha >= 1) {
+          this.alphaSpeed = -this.alphaSpeed;
+        }
+
+        if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(165, 243, 252, ${this.alpha})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "#38bdf8";
+        ctx.fill();
+        ctx.restore();
+      }
     }
-    setLoading(false);
-  };
 
-  const handleSignIn = async (e) => {
+    const fireflies = Array.from({ length: 45 }, () => new Firefly());
+    let animationId;
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+      fireflies.forEach((firefly) => {
+        firefly.update();
+        firefly.draw();
+      });
+      animationId = requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrorMsg('');
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
-    if (error) {
-      setErrorMsg(error.message);
-    } else if (data.session) {
-      onLogin(data.session);
+
+    if (isLogin) {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) setErrorMsg(error.message);
+      else if (data.session) onLogin(data.session);
+    } else {
+      const { error } = await supabase.auth.signUp({ email, password });
+      if (error) {
+        setErrorMsg(error.message);
+      } else {
+        alert("Registration successful! You can now log in.");
+        setIsLogin(true);
+      }
     }
     setLoading(false);
   };
 
   return (
     <div className="login-wrapper">
-      <div className={`container ${isRightPanelActive ? 'right-panel-active' : ''}`} id="container">
-        <div className="form-container sign-up-container">
-          <form onSubmit={handleSignUp}>
-            <h1>Create Account</h1>
-            <span>Use your email for registration</span>
+      <canvas id="fireflies" ref={canvasRef}></canvas>
+
+      <div className="login-card">
+        <h2>{isLogin ? 'Masuk Akun' : 'Daftar Akun'}</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
             <input 
               type="email" 
-              placeholder="Email" 
-              required 
+              id="email" 
+              placeholder="Masukkan email" 
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-            />
-            <input 
-              type="password" 
-              placeholder="Password" 
               required 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
             />
-            {errorMsg && isRightPanelActive && <p className="error-text">{errorMsg}</p>}
-            <button type="submit" disabled={loading}>
-              {loading ? 'Registering...' : 'Sign Up'}
-            </button>
-          </form>
-        </div>
-        <div className="form-container sign-in-container">
-          <form onSubmit={handleSignIn}>
-            <h1>Sign in</h1>
-            <span>Use your account</span>
-            <input 
-              type="email" 
-              placeholder="Email" 
-              required 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input 
-              type="password" 
-              placeholder="Password" 
-              required 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errorMsg && !isRightPanelActive && <p className="error-text">{errorMsg}</p>}
-            <button type="submit" disabled={loading}>
-              {loading ? 'Logging in...' : 'Sign In'}
-            </button>
-          </form>
-        </div>
-        <div className="overlay-container">
-          <div className="overlay">
-            <div className="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>To keep connected with us please login with your personal info</p>
-              <button className="ghost" id="signIn" onClick={() => setIsRightPanelActive(false)}>Sign In</button>
-            </div>
-            <div className="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <p>Enter your personal details and start your journey with us</p>
-              <button className="ghost" id="signUp" onClick={() => setIsRightPanelActive(true)}>Sign Up</button>
-            </div>
           </div>
+          <div className="input-group">
+            <label htmlFor="password">Kata Sandi</label>
+            <input 
+              type="password" 
+              id="password" 
+              placeholder="Masukkan kata sandi" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required 
+            />
+          </div>
+          
+          {errorMsg && <p style={{ color: '#ef4444', fontSize: '12px', marginBottom: '10px' }}>{errorMsg}</p>}
+          
+          <button className="btn-login" type="submit" disabled={loading}>
+            {loading ? 'Loading...' : (isLogin ? 'Login' : 'Daftar')}
+          </button>
+        </form>
+
+        <div className="divider">
+          <span>atau login dengan</span>
+        </div>
+
+        <div className="social-login">
+          <button className="social-btn" id="google"><i className="fab fa-google"></i></button>
+          <button className="social-btn" id="facebook"><i className="fab fa-facebook-f"></i></button>
+          <button className="social-btn" id="github"><i className="fab fa-github"></i></button>
+        </div>
+
+        <div className="extra">
+          {isLogin ? (
+            <p>Belum punya akun? <a href="#" onClick={(e) => { e.preventDefault(); setIsLogin(false); }}>Daftar Sekarang</a></p>
+          ) : (
+            <p>Sudah punya akun? <a href="#" onClick={(e) => { e.preventDefault(); setIsLogin(true); }}>Login Sekarang</a></p>
+          )}
         </div>
       </div>
     </div>
