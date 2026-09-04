@@ -823,8 +823,16 @@ function App() {
       ) : (
         <main className="holiday-page">
           <section className="holiday-panel glass-card">
-            <div className="holiday-header-row">
-              <h2>Daftar Libur Nasional <span style={{ fontSize: '1rem', fontWeight: 'normal', color: 'var(--text-secondary)' }}>({holidayList.length} Hari Aktif)</span></h2>
+            <div className="holiday-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+              <h2 style={{ margin: 0 }}>Daftar Libur Nasional</h2>
+              <div style={{
+                background: 'var(--bg-inset)', padding: '0.75rem 1.25rem', borderRadius: '12px',
+                border: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center',
+                boxShadow: '2px 2px 0 var(--border)'
+              }}>
+                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Libur Aktif</span>
+                <strong style={{ fontSize: '1.5rem', color: 'var(--text-primary)', lineHeight: 1 }}>{holidayList.length}</strong>
+              </div>
             </div>
 
             <div className="holiday-input-row holiday-input-row-large holiday-input-stack">
