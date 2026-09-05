@@ -137,14 +137,41 @@ const formatHolidayText = (dateString, label) => {
 
 function App() {
   const [session, setSession] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const isAuth = sessionStorage.getItem('isAuthenticated');
-    if (isAuth) {
-      setSession(true);
-    }
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      if (session) fetchUserRole(session.user.id);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (session) {
+        fetchUserRole(session.user.id);
+      } else {
+        setUserRole(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
+
+  const fetchUserRole = async (userId) => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+      
+      if (error) throw error;
+      if (data) setUserRole(data.role);
+    } catch (err) {
+      console.error('Error fetching user role:', err.message);
+    }
+  };
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentView, setCurrentView] = useState('dashboard');
@@ -651,7 +678,7 @@ function App() {
   }
 
   if (!session) {
-    return <Login onLogin={setSession} />;
+    return <Login />;
   }
 
   return (
@@ -662,9 +689,8 @@ function App() {
             <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
             <button 
               className="icon-button danger" 
-              onClick={() => {
-                sessionStorage.removeItem('isAuthenticated');
-                setSession(null);
+              onClick={async () => {
+                await supabase.auth.signOut();
               }} 
               title="Logout"
               style={{ padding: '0.4rem', borderRadius: '50%' }}
@@ -764,31 +790,33 @@ function App() {
               )}
             </div>
 
-            <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-              <input
-                type="file"
-                accept=".xlsx, .xls, .csv"
-                style={{ display: 'none' }}
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-              />
-              <button
-                className="btn btn-upload"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <UploadCloud size={16} />
-                <span>Unggah Data</span>
-              </button>
+            {userRole === 'admin' && (
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+                <input
+                  type="file"
+                  accept=".xlsx, .xls, .csv"
+                  style={{ display: 'none' }}
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                />
+                <button
+                  className="btn btn-upload"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <UploadCloud size={16} />
+                  <span>Unggah Data</span>
+                </button>
 
-              <button
-                className="btn btn-reset"
-                onClick={handleResetData}
-                title="Hapus Semua Data"
-              >
-                <Trash2 size={16} />
-                <span>Reset</span>
-              </button>
-            </div>
+                <button
+                  className="btn btn-reset"
+                  onClick={handleResetData}
+                  title="Hapus Semua Data"
+                >
+                  <Trash2 size={16} />
+                  <span>Reset</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </header>

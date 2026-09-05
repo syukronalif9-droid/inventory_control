@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
+import { supabase } from '../supabaseClient';
 import './Login.css';
 
-const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
+const Login = () => {
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -13,16 +14,20 @@ const Login = ({ onLogin }) => {
     setLoading(true);
     setErrorMsg('');
 
-    // Simulate API call delay for effect
-    setTimeout(() => {
-      if (username === 'Inventory' && password === 'Maganghub26') {
-        sessionStorage.setItem('isAuthenticated', 'true');
-        onLogin(true);
-      } else {
-        setErrorMsg('Sesi Anda telah habis. Silakan masuk lagi.');
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        throw error;
       }
+    } catch (err) {
+      setErrorMsg(err.message || 'Gagal masuk. Periksa kembali email dan kata sandi Anda.');
+    } finally {
       setLoading(false);
-    }, 800);
+    }
   };
 
   return (
@@ -34,15 +39,15 @@ const Login = ({ onLogin }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="email">Email</label>
             <input
-              type="text"
-              id="username"
-              name="username"
-              autoComplete="username"
-              placeholder="Masukkan username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              id="email"
+              name="email"
+              autoComplete="email"
+              placeholder="Masukkan email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -74,12 +79,12 @@ const Login = ({ onLogin }) => {
           <div className="checkbox-group">
             <label>
               <input type="checkbox" name="remember" defaultChecked />
-              Ingat username
+              Ingat email
             </label>
           </div>
 
           <button className="btn-login" type="submit" disabled={loading}>
-            Masuk
+            {loading ? 'Memproses...' : 'Masuk'}
           </button>
         </form>
       </div>
