@@ -66,7 +66,7 @@ export default function SummaryCards({ data }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div>
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
-            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>INVENTORY</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>LINE INVENTORY</h3>
           </div>
           <div className="icon-container" style={{ background: 'var(--yellow)', color: 'var(--text-dark)' }}>
             <Box size={24} strokeWidth={2.5} />
@@ -81,7 +81,7 @@ export default function SummaryCards({ data }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
           <div>
             <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Material Group</div>
-            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>EXPENSE (OB)</h3>
+            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>LINE EXPENSE (OB)</h3>
           </div>
           <div className="icon-container" style={{ background: 'var(--blue-light)', color: 'var(--text-dark)' }}>
             <DollarSign size={24} strokeWidth={2.5} />
