@@ -33,7 +33,7 @@ const Login = () => {
   return (
     <div className="login-wrapper">
       <div className="login-card">
-        <img src="/logo ggf no bg.png" alt="Logo Great Giant Foods" className="login-logo" style={{ maxWidth: '300px', height: 'auto' }} />
+        <img src="/123.jpeg" alt="Logo Great Giant Foods" className="login-logo" style={{ maxWidth: '300px', height: 'auto' }} />
         
         {errorMsg && <div className="error-message">{errorMsg}</div>}
 
