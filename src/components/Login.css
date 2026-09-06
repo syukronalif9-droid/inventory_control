@@ -19,9 +19,12 @@
 
 .login-logo {
   display: block;
-  margin: -10px auto 10px;
-  max-width: 220px;
-  height: auto;
+  margin: -20px -24px 20px -24px;
+  width: calc(100% + 48px);
+  max-width: none;
+  height: 130px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .login-card .input-group {
