@@ -250,7 +250,6 @@ function App() {
         'Material Doc.Item': row.material_doc_item,
         'Storage Location': row.storage_location,
         'Movement Type': row.movement_type,
-        'QTY GR': parseFloat(row.qty_gr) || 0,
         'Posting Date': formatToDDMMYYYY(row.posting_date),
         'Entry Date': formatToDDMMYYYY(row.entry_date),
         'Matl.Group': row.material_type,

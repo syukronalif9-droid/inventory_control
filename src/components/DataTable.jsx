@@ -231,7 +231,7 @@ export default function DataTable({ data }) {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
               {Object.entries(selectedRow).map(([key, value]) => {
-                if (key === 'id') return null; // skip internal id
+                if (key === 'id' || key === 'JUMLAH GR' || key === 'Belum GR') return null; // skip hidden fields
                 return (
                   <div key={key} style={{
                     background: 'var(--bg-dark)', padding: '1rem', borderRadius: '8px',
