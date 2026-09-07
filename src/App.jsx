@@ -372,24 +372,69 @@ function App() {
           return cleanedRow;
         });
 
-        // 1. Delete existing data for the dates present in the uploaded file to prevent duplicates
+        // 1. Temukan dan hapus data lama berdasarkan kombinasi 3 kolom: Purchasing Document, Shipping Date, dan Item
         const datesInFile = [...new Set(cleanedData.map(row => row.shipping_date).filter(Boolean))];
+        let idsToDelete = [];
 
         if (datesInFile.length > 0) {
-          const dateChunkSize = 100;
+          // Ambil data lama berdasarkan shipping_date yang ada di file baru (meminimalisir query ke database)
+          const dateChunkSize = 50;
+          let existingRecords = [];
           for (let i = 0; i < datesInFile.length; i += dateChunkSize) {
             const dateChunk = datesInFile.slice(i, i + dateChunkSize);
-            const { error: deleteError } = await supabase
+            const { data: records, error: fetchError } = await supabase
               .from('inventory_records')
-              .delete()
+              .select('id, item, shipping_date, purchasing_document')
               .in('shipping_date', dateChunk);
 
-            if (deleteError) {
-              console.error('Delete error', deleteError);
-              alert('Error menghapus data lama: ' + deleteError.message);
+            if (fetchError) {
+              console.error('Fetch existing data error', fetchError);
+              alert('Error mengambil data lama: ' + fetchError.message);
               setLoading(false);
               if (fileInputRef.current) fileInputRef.current.value = '';
               return;
+            }
+            if (records) {
+              existingRecords = [...existingRecords, ...records];
+            }
+          }
+
+          // Helper untuk membuat kunci komposit
+          const getCompositeKey = (row) => {
+            const purcDoc = String(row.purchasing_document || '').trim();
+            const shipDate = String(row.shipping_date || '').trim();
+            const item = String(row.item || '').trim();
+            return `${purcDoc}|${shipDate}|${item}`;
+          };
+
+          // Buat Set berisi kunci dari data baru yang di-upload
+          const newKeys = new Set(cleanedData.map(row => getCompositeKey(row)));
+
+          // Cocokkan dengan data lama
+          existingRecords.forEach(record => {
+            const recordKey = getCompositeKey(record);
+            if (newKeys.has(recordKey)) {
+              idsToDelete.push(record.id); // Simpan ID data lama yang sama persis
+            }
+          });
+
+          // Hapus baris lama yang cocok (timpa dengan yang baru)
+          if (idsToDelete.length > 0) {
+            const delChunkSize = 500;
+            for (let i = 0; i < idsToDelete.length; i += delChunkSize) {
+              const delChunk = idsToDelete.slice(i, i + delChunkSize);
+              const { error: deleteError } = await supabase
+                .from('inventory_records')
+                .delete()
+                .in('id', delChunk);
+
+              if (deleteError) {
+                console.error('Delete error', deleteError);
+                alert('Error menghapus data lama: ' + deleteError.message);
+                setLoading(false);
+                if (fileInputRef.current) fileInputRef.current.value = '';
+                return;
+              }
             }
           }
         }
