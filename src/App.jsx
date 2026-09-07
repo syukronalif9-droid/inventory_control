@@ -490,6 +490,19 @@ function App() {
     reader.readAsArrayBuffer(file);
   };
 
+  const handleExportExcel = () => {
+    if (filteredData.length === 0) {
+      alert("Tidak ada data untuk diekspor!");
+      return;
+    }
+    
+    const ws = utils.json_to_sheet(filteredData);
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "Data TMR");
+    
+    const dateStr = new Date().toISOString().split('T')[0];
+    writeFile(wb, `TMR_Dashboard_Export_${dateStr}.xlsx`);
+  };
 
   const handleResetData = async () => {
     if (!window.confirm("AWAS: Apakah Anda yakin ingin menghapus SELURUH data dari database? Tindakan ini tidak bisa dibatalkan!")) {
@@ -731,6 +744,13 @@ function App() {
         <div className="title-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
+            <button 
+              className="btn btn-outline" 
+              onClick={handleExportExcel}
+              style={{ padding: '0.4rem 0.8rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            >
+              <DownloadCloud size={16} /> Export Excel
+            </button>
             <button 
               className="icon-button danger" 
               onClick={async () => {
