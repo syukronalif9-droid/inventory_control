@@ -206,8 +206,8 @@ export default function DataTable({ data }) {
           zIndex: 1000, padding: '1rem', backdropFilter: 'blur(4px)'
         }}>
           <div className="glass-card" style={{
-            width: '100%', maxWidth: '800px', maxHeight: '90vh',
-            overflowY: 'auto', position: 'relative',
+            width: '95%', maxWidth: '1400px', maxHeight: '90vh',
+            overflowY: 'auto', overflowX: 'hidden', position: 'relative',
             background: 'var(--bg-card)', border: '1px solid var(--border-light)',
             boxShadow: '0 25px 50px -12px var(--blue-light)'
           }}>
@@ -229,7 +229,7 @@ export default function DataTable({ data }) {
               Detail TMR: <span style={{ color: '#000000' }}>{selectedRow['TMR Number'] || 'N/A'}</span>
             </h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
               {Object.entries(selectedRow).map(([key, value]) => {
                 if (key === 'id' || key === 'JUMLAH GR' || key === 'Belum GR') return null; // skip hidden fields
                 return (
