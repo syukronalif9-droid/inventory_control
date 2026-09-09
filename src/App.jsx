@@ -7,7 +7,6 @@ import SummaryCards from './components/SummaryCards';
 import ShippingScoreCard from './components/ShippingScoreCard';
 import GRScoreCard from './components/GRScoreCard';
 import DataTable from './components/DataTable';
-import Login from './components/Login';
 import { calculateWorkDays } from './utils/dateUtils';
 
 function formatToDDMMYYYY(val) {
@@ -33,20 +32,26 @@ function formatToDDMMYYYY(val) {
       // YYYY-MM-DD
       dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
     } else {
-      // DD-MM-YYYY or MM-DD-YYYY or M/D/YY
-      let day = parseInt(parts[0], 10);
-      let month = parseInt(parts[1], 10);
-      let year = parseInt(parts[2], 10);
+      let p0 = parseInt(parts[0], 10);
+      let p1 = parseInt(parts[1], 10);
+      let p2 = parseInt(parts[2], 10);
 
-      if (month > 12) {
-        let temp = month; month = day; day = temp;
+      if (!isNaN(p0) && !isNaN(p1) && !isNaN(p2)) {
+        let day = p0;
+        let month = p1;
+        let year = p2;
+
+        if (p1 > 12) {
+          day = p1; month = p0;
+        } else if (p0 > 12) {
+          day = p0; month = p1;
+        }
+
+        if (year < 100) year += 2000;
+        dateObj = new Date(year, month - 1, day);
+      } else {
+        dateObj = new Date(strVal);
       }
-
-      if (year < 100) {
-        year += 2000;
-      }
-
-      dateObj = new Date(year, month - 1, day);
     }
   } else {
     dateObj = new Date(val);
@@ -734,9 +739,6 @@ function App() {
     );
   }
 
-  if (!session) {
-    return <Login />;
-  }
 
   return (
     <div className="app-container">
@@ -751,16 +753,7 @@ function App() {
             >
               <DownloadCloud size={16} /> Export Excel
             </button>
-            <button 
-              className="icon-button danger" 
-              onClick={async () => {
-                await supabase.auth.signOut();
-              }} 
-              title="Logout"
-              style={{ padding: '0.4rem', borderRadius: '50%' }}
-            >
-              <LogOut size={16} />
-            </button>
+
           </div>
 
           <div className="page-switcher">
