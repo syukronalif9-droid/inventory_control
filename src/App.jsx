@@ -7,6 +7,7 @@ import SummaryCards from './components/SummaryCards';
 import ShippingScoreCard from './components/ShippingScoreCard';
 import GRScoreCard from './components/GRScoreCard';
 import DataTable from './components/DataTable';
+import Login from './components/Login';
 import { calculateWorkDays } from './utils/dateUtils';
 
 function formatToDDMMYYYY(val) {
@@ -739,6 +740,9 @@ function App() {
     );
   }
 
+  if (!session) {
+    return <Login />;
+  }
 
   return (
     <div className="app-container">
@@ -753,7 +757,16 @@ function App() {
             >
               <DownloadCloud size={16} /> Export Excel
             </button>
-
+            <button 
+              className="icon-button danger" 
+              onClick={async () => {
+                await supabase.auth.signOut();
+              }} 
+              title="Logout"
+              style={{ padding: '0.4rem', borderRadius: '50%' }}
+            >
+              <LogOut size={16} />
+            </button>
           </div>
 
           <div className="page-switcher">
