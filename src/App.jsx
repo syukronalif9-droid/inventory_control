@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { Calendar, X, UploadCloud, DownloadCloud, Trash2, Plus, LogOut } from 'lucide-react';
+import { Calendar, X, UploadCloud, DownloadCloud, Trash2, Plus, LogOut, RefreshCw } from 'lucide-react';
 import { read, utils, writeFile } from 'xlsx';
 import { supabase } from './supabaseClient';
 
@@ -141,36 +141,40 @@ function App() {
   const [statusGrFilter, setStatusGrFilter] = useState('');
   const [destinationFilter, setDestinationFilter] = useState('');
 
-  useEffect(() => {
-    const fetchFromSupabase = async () => {
-      try {
-        let allData = [];
-        let from = 0;
-        const step = 1000;
+  const [lastFetched, setLastFetched] = useState(null);
 
-        while (true) {
-          const { data: chunk, error } = await supabase
-            .from('inventory_records')
-            .select('*')
-            .range(from, from + step - 1);
+  const fetchFromSupabase = async () => {
+    setLoading(true);
+    try {
+      let allData = [];
+      let from = 0;
+      const step = 1000;
 
-          if (error) throw error;
-          if (!chunk || chunk.length === 0) break;
+      while (true) {
+        const { data: chunk, error } = await supabase
+          .from('inventory_records')
+          .select('*')
+          .range(from, from + step - 1);
 
-          allData = [...allData, ...chunk];
-          if (chunk.length < step) break;
-          from += step;
-        }
+        if (error) throw error;
+        if (!chunk || chunk.length === 0) break;
 
-        setRawData(allData);
-        setLoading(false);
-      } catch (err) {
-        console.error(err);
-        setError(err.message);
-        setLoading(false);
+        allData = [...allData, ...chunk];
+        if (chunk.length < step) break;
+        from += step;
       }
-    };
 
+      setRawData(allData);
+      setLastFetched(new Date());
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchFromSupabase();
   }, []);
 
@@ -692,6 +696,21 @@ function App() {
         <div className="title-row" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
+            
+            {lastFetched && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--bg-card)', padding: '0.4rem 0.8rem', border: '2px solid var(--border)', boxShadow: '2px 2px 0 var(--border)', fontSize: '0.75rem', fontWeight: 700 }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Update:</span>
+                <span style={{ color: 'var(--text-primary)' }}>{lastFetched.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
+                <button 
+                  onClick={fetchFromSupabase}
+                  title="Muat Ulang Data"
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold)', display: 'flex', alignItems: 'center', padding: 0, marginLeft: '0.2rem' }}
+                >
+                  <RefreshCw size={14} />
+                </button>
+              </div>
+            )}
+
             <button 
               className="btn btn-outline" 
               onClick={handleExportExcel}
