@@ -211,12 +211,15 @@ function App() {
         'Destination.1': row.destination_1,
         'Matl. Group': row.material_type
       };
+      const isBelumShipping = !row.gr_date_tmr || row.gr_date_tmr === 'null' || row.gr_date_tmr === '-' || row.gr_date_tmr === '';
 
       const workDays = calculateWorkDays(mappedRow['Shipping Date'], mappedRow['GR Date TMR'], holidayDates);
       mappedRow['Performance Shipping TMR (Hari)'] = workDays;
 
       if (workDays === null) {
         mappedRow['Status Shipping'] = '-';
+      } else if (isBelumShipping) {
+        mappedRow['Status Shipping'] = workDays > 2 ? 'Late' : '-';
       } else {
         mappedRow['Status Shipping'] = workDays > 2 ? 'Late' : 'Ontime';
       }
@@ -226,6 +229,8 @@ function App() {
 
       if (workDaysGR === null) {
         mappedRow['Status GR 101'] = '-';
+      } else if (isBelumGr) {
+        mappedRow['Status GR 101'] = workDaysGR > 2 ? 'Late' : '-';
       } else {
         mappedRow['Status GR 101'] = workDaysGR > 2 ? 'Late' : 'Ontime';
       }
