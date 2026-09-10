@@ -8,63 +8,8 @@ import ShippingScoreCard from './components/ShippingScoreCard';
 import GRScoreCard from './components/GRScoreCard';
 import DataTable from './components/DataTable';
 import Login from './components/Login';
-import { calculateWorkDays } from './utils/dateUtils';
+import { calculateWorkDays, formatToDDMMYYYY, parseAnyDate } from './utils/dateUtils';
 
-function formatToDDMMYYYY(val) {
-  if (!val || val === 'null' || val === '-') return '-';
-
-  // if it's an excel serial date
-  if (!isNaN(val) && !isNaN(parseFloat(val))) {
-    const serial = parseFloat(val);
-    const dateObj = new Date(Math.round((serial - 25569) * 86400 * 1000));
-    dateObj.setMinutes(dateObj.getMinutes() + dateObj.getTimezoneOffset());
-    const d = String(dateObj.getDate()).padStart(2, '0');
-    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const y = dateObj.getFullYear();
-    return `${d}/${m}/${y}`;
-  }
-
-  let dateObj;
-  const strVal = String(val).trim().split(' ')[0]; // remove time if any
-  const parts = strVal.split(/[/.-]/);
-
-  if (parts.length === 3) {
-    if (parts[0].length === 4) {
-      // YYYY-MM-DD
-      dateObj = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
-    } else {
-      let p0 = parseInt(parts[0], 10);
-      let p1 = parseInt(parts[1], 10);
-      let p2 = parseInt(parts[2], 10);
-
-      if (!isNaN(p0) && !isNaN(p1) && !isNaN(p2)) {
-        let day = p0;
-        let month = p1;
-        let year = p2;
-
-        if (p1 > 12) {
-          day = p1; month = p0;
-        } else if (p0 > 12) {
-          day = p0; month = p1;
-        }
-
-        if (year < 100) year += 2000;
-        dateObj = new Date(year, month - 1, day);
-      } else {
-        dateObj = new Date(strVal);
-      }
-    }
-  } else {
-    dateObj = new Date(val);
-  }
-
-  if (isNaN(dateObj?.getTime())) return val;
-
-  const d = String(dateObj.getDate()).padStart(2, '0');
-  const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-  const y = dateObj.getFullYear();
-  return `${d}/${m}/${y}`;
-}
 
 const CustomDateInput = ({ value, onChange, title }) => {
   const getDisplayValue = () => {
@@ -300,7 +245,7 @@ function App() {
     reader.onload = async (evt) => {
       try {
         const arrayBuffer = evt.target.result;
-        const wb = read(arrayBuffer, { type: 'array' });
+        const wb = read(arrayBuffer, { type: 'array', cellDates: true, dateNF: 'yyyy-mm-dd' });
         const wsname = wb.SheetNames[0];
         const ws = wb.Sheets[wsname];
 
@@ -313,7 +258,7 @@ function App() {
           }
         }
 
-        const dataJson = utils.sheet_to_json(ws, { raw: false, range: headerRowIndex });
+        const dataJson = utils.sheet_to_json(ws, { raw: false, dateNF: 'yyyy-mm-dd', range: headerRowIndex });
 
         if (dataJson.length === 0) {
           alert('File Excel kosong atau tidak bisa dibaca!');
@@ -339,7 +284,11 @@ function App() {
           for (const key in row) {
             const cleanKey = key.replace(/ /g, '_').replace(/\./g, '_').replace(/\//g, '_').toLowerCase();
             if (allowedKeys.includes(cleanKey)) {
-              cleanedRow[cleanKey] = String(row[key]);
+              if (['shipping_date', 'gr_date_tmr', 'posting_date', 'entry_date', 'created_on', 'distribution_date'].includes(cleanKey)) {
+                cleanedRow[cleanKey] = formatToDDMMYYYY(row[key]);
+              } else {
+                cleanedRow[cleanKey] = String(row[key]);
+              }
             }
             // Fallback for destination
             if (cleanKey === 'destination' && !row['Destination.1']) {
@@ -576,32 +525,20 @@ function App() {
       // Filter Date Range
       if (startDate || endDate) {
         const dStr = item['Shipping Date'] || '';
-        if (!dStr || dStr === '-') {
+        const itemDateObj = parseAnyDate(dStr);
+        if (!itemDateObj) {
           valid = false;
         } else {
-          // dStr is guaranteed to be DD/MM/YYYY because of formatToDDMMYYYY
-          const parts = dStr.split('/');
-          if (parts.length === 3) {
-            const itemDateObj = new Date(parseInt(parts[2], 10), parseInt(parts[1], 10) - 1, parseInt(parts[0], 10));
-
-            if (startDate) {
-              const sParts = startDate.split('-');
-              let y = parseInt(sParts[0], 10);
-              if (y < 100) y += 2000;
-              const startObj = new Date(y, parseInt(sParts[1], 10) - 1, parseInt(sParts[2], 10));
-              if (itemDateObj < startObj) valid = false;
-            }
-            if (endDate) {
-              const eParts = endDate.split('-');
-              let y = parseInt(eParts[0], 10);
-              if (y < 100) y += 2000;
-              const endObj = new Date(y, parseInt(eParts[1], 10) - 1, parseInt(eParts[2], 10));
-              // End date should be at the end of the day to include all times on that day
+          if (startDate) {
+            const startObj = parseAnyDate(startDate);
+            if (startObj && itemDateObj < startObj) valid = false;
+          }
+          if (endDate) {
+            const endObj = parseAnyDate(endDate);
+            if (endObj) {
               endObj.setHours(23, 59, 59, 999);
               if (itemDateObj > endObj) valid = false;
             }
-          } else {
-            valid = false; // Fallback if format is completely unrecognized
           }
         }
       }
