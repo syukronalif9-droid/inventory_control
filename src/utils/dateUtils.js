@@ -104,20 +104,20 @@ export function parseAnyDate(val) {
         month = p1 - 1;
         day = p2;
       } else if (parts[2].length === 4 || p2 > 1000) {
-        // DD/MM/YYYY or MM/DD/YYYY
+        // MM/DD/YYYY or DD/MM/YYYY
         year = p2;
         if (p0 > 12) {
-          // Definitely DD/MM/YYYY
+          // Definitely DD/MM/YYYY (p0 can't be month)
           day = p0;
           month = p1 - 1;
         } else if (p1 > 12) {
-          // Definitely MM/DD/YYYY
+          // Definitely MM/DD/YYYY (p1 can't be month)
           day = p1;
           month = p0 - 1;
         } else {
-          // Ambiguous (both <= 12). Default to Indonesian/European standard: DD/MM/YYYY
-          day = p0;
-          month = p1 - 1;
+          // Ambiguous (both <= 12). Default to MM/DD/YYYY (format used by Supabase data)
+          month = p0 - 1;
+          day = p1;
         }
       } else {
         // 2-digit year (e.g. 10/05/26)
@@ -126,8 +126,9 @@ export function parseAnyDate(val) {
           day = p0;
           month = p1 - 1;
         } else {
-          day = p0;
-          month = p1 - 1;
+          // Default to MM/DD/YY
+          month = p0 - 1;
+          day = p1;
         }
       }
 
@@ -153,7 +154,8 @@ export function formatToDDMMYYYY(val) {
   const d = String(dt.getDate()).padStart(2, '0');
   const m = String(dt.getMonth() + 1).padStart(2, '0');
   const y = dt.getFullYear();
-  return `${d}/${m}/${y}`;
+  // Output as MM/DD/YYYY to match Supabase storage format
+  return `${m}/${d}/${y}`;
 }
 
 export function parseDDMMYYYY(dateString) {

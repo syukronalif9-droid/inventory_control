@@ -13,11 +13,11 @@ import { calculateWorkDays, formatToDDMMYYYY, parseAnyDate } from './utils/dateU
 
 const CustomDateInput = ({ value, onChange, title }) => {
   const getDisplayValue = () => {
-    if (!value) return 'DD/MM/YYYY';
+    if (!value) return 'MM/DD/YYYY';
     const [y, m, d] = value.split('-');
     let displayY = parseInt(y, 10);
     if (displayY < 100) displayY += 2000;
-    return `${d}/${m}/${displayY}`;
+    return `${m}/${d}/${displayY}`;
   };
 
   return (
@@ -42,22 +42,22 @@ const CustomDateInput = ({ value, onChange, title }) => {
 
 const defaultHolidayList = [
   { date: '01/01/2026', label: 'Tahun Baru 2025 Masehi' },
-  { date: '16/01/2026', label: "Isra' Mi'raj Nabi Muhammad SAW" },
-  { date: '17/02/2026', label: 'Tahun Baru Imlek 5777' },
-  { date: '19/03/2026', label: 'Hari Suci Nyepi' },
-  { date: '21/03/2026', label: 'Hari Raya Idul Fitri' },
-  { date: '22/03/2026', label: 'Hari Raya Idul Fitri' },
-  { date: '03/04/2026', label: 'Wafat Yesus Kristus' },
-  { date: '05/04/2026', label: 'Hari Raya Paskah' },
-  { date: '01/05/2026', label: 'Hari Buruh Internasional' },
-  { date: '14/05/2026', label: 'Kenaikan Yesus Kristus' },
-  { date: '27/05/2026', label: 'Hari Raya Idul Adha 10 Dzulhijjah 1447 H' },
-  { date: '31/05/2026', label: 'Hari Raya Waisak' },
-  { date: '01/06/2026', label: 'Hari Lahir Pancasila' },
-  { date: '16/06/2026', label: 'Tahun Baru Hijriyah 1 Muharram 1448 H' },
-  { date: '17/08/2026', label: 'Hari Proklamasi Kemerdekaan Repu' },
-  { date: '25/08/2026', label: 'Maulid Nabi Muhammad SAW' },
-  { date: '25/12/2026', label: 'Hari Raya Natal' }
+  { date: '01/16/2026', label: "Isra' Mi'raj Nabi Muhammad SAW" },
+  { date: '02/17/2026', label: 'Tahun Baru Imlek 5777' },
+  { date: '03/19/2026', label: 'Hari Suci Nyepi' },
+  { date: '03/21/2026', label: 'Hari Raya Idul Fitri' },
+  { date: '03/22/2026', label: 'Hari Raya Idul Fitri' },
+  { date: '04/03/2026', label: 'Wafat Yesus Kristus' },
+  { date: '04/05/2026', label: 'Hari Raya Paskah' },
+  { date: '05/01/2026', label: 'Hari Buruh Internasional' },
+  { date: '05/14/2026', label: 'Kenaikan Yesus Kristus' },
+  { date: '05/27/2026', label: 'Hari Raya Idul Adha 10 Dzulhijjah 1447 H' },
+  { date: '05/31/2026', label: 'Hari Raya Waisak' },
+  { date: '06/01/2026', label: 'Hari Lahir Pancasila' },
+  { date: '06/16/2026', label: 'Tahun Baru Hijriyah 1 Muharram 1448 H' },
+  { date: '08/17/2026', label: 'Hari Proklamasi Kemerdekaan Repu' },
+  { date: '08/25/2026', label: 'Maulid Nabi Muhammad SAW' },
+  { date: '12/25/2026', label: 'Hari Raya Natal' }
 ];
 
 const formatISODateToDDMMYYYY = (value) => {
@@ -72,7 +72,8 @@ const formatISODateToDDMMYYYY = (value) => {
   const d = String(date.getDate()).padStart(2, '0');
   const m = String(date.getMonth() + 1).padStart(2, '0');
   const y = date.getFullYear();
-  return `${d}/${m}/${y}`;
+  // Output as MM/DD/YYYY to match the standard format used throughout the app
+  return `${m}/${d}/${y}`;
 };
 
 const monthNames = [
@@ -81,7 +82,8 @@ const monthNames = [
 ];
 
 const formatHolidayText = (dateString, label) => {
-  const [day, month, year] = dateString.split('/').map(Number);
+  // dateString is now in MM/DD/YYYY format
+  const [month, day, year] = dateString.split('/').map(Number);
   if (!day || !month || !year) return `${dateString}: ${label}`;
   return `${day} ${monthNames[month - 1]} ${year}: ${label}`;
 };
