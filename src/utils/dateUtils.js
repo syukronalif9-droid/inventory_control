@@ -193,8 +193,13 @@ export function calculateWorkDays(startDateStr, endDateStr, holidayList = []) {
     })
     .filter(Boolean);
 
+  // Same day = 1 day performance
+  if (isSameDay(start, end)) return 1;
+
   let workDays = 0;
+  // Start counting from the day AFTER the start date
   let currentDate = new Date(start);
+  currentDate.setDate(currentDate.getDate() + 1);
 
   while (currentDate <= end) {
     const dayOfWeek = currentDate.getDay(); // 0 is Sunday, 1-6 are Mon-Sat
@@ -212,6 +217,6 @@ export function calculateWorkDays(startDateStr, endDateStr, holidayList = []) {
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  return Math.max(0, workDays - 1);
+  return Math.max(1, workDays);
 }
 
