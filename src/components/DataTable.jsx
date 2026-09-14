@@ -42,6 +42,7 @@ export default function DataTable({ data }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState(null);
   const [hoveredCol, setHoveredCol] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
   const rowsPerPage = 50;
 
   const columns = useMemo(() => {
@@ -163,7 +164,7 @@ export default function DataTable({ data }) {
           <tbody>
             {currentData.length > 0 ? (
               currentData.map((row, idx) => (
-                <tr key={idx}>
+                <tr key={idx} onDoubleClick={() => setSelectedRow(row)} style={{ cursor: 'pointer' }}>
                   {columns.map(col => {
                     let content = formatValue(row[col]);
                     let cellStyle = { whiteSpace: 'nowrap', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' };
@@ -246,6 +247,30 @@ export default function DataTable({ data }) {
           >
             <ChevronRight size={20} />
           </button>
+        </div>
+      )}
+
+      {selectedRow && (
+        <div className="modal-overlay" onClick={() => setSelectedRow(null)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
+                <Database size={20} style={{ color: 'var(--gold)' }} /> 
+                Detail Record
+              </h3>
+              <button onClick={() => setSelectedRow(null)} className="icon-button danger" style={{ border: 'none', background: 'transparent' }} title="Tutup">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="modal-body" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
+              {Object.keys(selectedRow).map(key => (
+                <div key={key} className="detail-row">
+                  <span className="detail-label">{key}</span>
+                  <strong className="detail-value">{formatValue(selectedRow[key])}</strong>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
