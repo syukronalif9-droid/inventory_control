@@ -32,69 +32,73 @@ export default function SummaryCards({ data }) {
     return { invSudahGRCount, invBelumGRCount, expSudahGRCount, expBelumGRCount };
   }, [data]);
 
-  const CardRow = ({ label, value, isGold }) => (
-    <div style={{
-      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-      padding: '0.5rem 0',
-      borderBottom: '2px dashed var(--border)',
-      marginBottom: '0.6rem',
-    }}>
-      <span style={{
-        fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase',
-        letterSpacing: '0.05em',
-        color: 'var(--text-secondary)',
-      }}>
-        {label}
-      </span>
+  const CardRow = ({ label, value, type }) => {
+    const isSudah = type === 'sudah';
+    return (
       <div style={{
-        background: isGold ? 'var(--mint)' : 'var(--blue-light)',
-        padding: '0.4rem 0.8rem',
-        border: '2px solid var(--border)',
-        boxShadow: '3px 3px 0 var(--border)',
-        minWidth: '80px',
-        textAlign: 'center'
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        padding: '0.5rem 1rem',
+        marginBottom: '0.6rem',
+        backgroundColor: isSudah ? 'transparent' : '#e2e8f0',
+        border: isSudah ? '1px solid #15803d' : '1px solid transparent',
+        borderRadius: '4px',
       }}>
+        <span style={{
+          fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase',
+          color: isSudah ? '#15803d' : '#475569',
+        }}>
+          {label}
+        </span>
         <strong style={{
-          fontSize: '1.5rem', fontWeight: 800, lineHeight: 1,
-          color: isGold ? 'var(--border-accent)' : 'var(--text-dark)',
+          fontSize: '1.4rem', fontWeight: 800,
+          color: isSudah ? '#15803d' : '#1e293b',
         }}>
           {value.toLocaleString('id-ID')}
         </strong>
       </div>
-    </div>
-  );
+    );
+  };
+
+  const cardStyle = {
+    backgroundColor: '#bce1ce',
+    borderRadius: '8px',
+    padding: '1.5rem',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+    display: 'flex',
+    flexDirection: 'column',
+  };
 
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
       
       {/* INVENTORY Card */}
-      <div className="glass-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+      <div style={cardStyle}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
           <div>
-            <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Group Material</div>
-            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>LINE INVENTORY</h3>
+            <div style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#115e59', marginBottom: '0.3rem' }}>Group Material</div>
+            <h3 style={{ color: '#064e3b', fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>LINE INVENTORY</h3>
           </div>
-          <div className="icon-container" style={{ background: 'var(--yellow)', color: 'var(--text-dark)' }}>
-            <Box size={24} strokeWidth={2.5} />
+          <div style={{ background: '#fed7aa', color: '#9a3412', padding: '0.5rem', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Box size={20} strokeWidth={2.5} />
           </div>
         </div>
-        <CardRow label="Sudah GR" value={stats.invSudahGRCount} isGold={true} />
-        <CardRow label="Belum GR" value={stats.invBelumGRCount} isGold={false} />
+        <CardRow label="Sudah GR" value={stats.invSudahGRCount} type="sudah" />
+        <CardRow label="Belum GR" value={stats.invBelumGRCount} type="belum" />
       </div>
       
       {/* EXPENSE Card */}
-      <div className="glass-card">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+      <div style={cardStyle}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.25rem' }}>
           <div>
-            <div style={{ fontSize: '0.65rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.14em', color: 'var(--text-secondary)', marginBottom: '0.3rem' }}>Group Material</div>
-            <h3 style={{ color: 'var(--text-primary)', fontSize: '1.3rem', textTransform: 'uppercase', letterSpacing: '0.06em', margin: 0 }}>LINE EXPENSE (OB)</h3>
+            <div style={{ fontSize: '0.7rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#115e59', marginBottom: '0.3rem' }}>Group Material</div>
+            <h3 style={{ color: '#064e3b', fontSize: '1.3rem', fontWeight: 800, margin: 0 }}>LINE EXPENSE (OB)</h3>
           </div>
-          <div className="icon-container" style={{ background: 'var(--blue-light)', color: 'var(--text-dark)' }}>
-            <DollarSign size={24} strokeWidth={2.5} />
+          <div style={{ background: '#e0f2fe', color: '#1e3a8a', padding: '0.5rem', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <DollarSign size={20} strokeWidth={2.5} />
           </div>
         </div>
-        <CardRow label="Sudah GR" value={stats.expSudahGRCount} isGold={true} />
-        <CardRow label="Belum GR" value={stats.expBelumGRCount} isGold={false} />
+        <CardRow label="Sudah GR" value={stats.expSudahGRCount} type="sudah" />
+        <CardRow label="Belum GR" value={stats.expBelumGRCount} type="belum" />
       </div>
 
     </div>
