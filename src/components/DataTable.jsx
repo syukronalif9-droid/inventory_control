@@ -254,21 +254,24 @@ export default function DataTable({ data }) {
         <div className="modal-overlay" onClick={() => setSelectedRow(null)}>
           <div className="modal-content" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem', color: 'var(--text-primary)' }}>
-                <Database size={20} style={{ color: 'var(--gold)' }} /> 
-                Detail Record
+              <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <Database size={20} /> Detail Record
               </h3>
               <button onClick={() => setSelectedRow(null)} className="icon-button danger" style={{ border: 'none', background: 'transparent' }} title="Tutup">
                 <X size={24} />
               </button>
             </div>
-            <div className="modal-body" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.25rem' }}>
-              {Object.keys(selectedRow).map(key => (
-                <div key={key} className="detail-row">
-                  <span className="detail-label">{key}</span>
-                  <strong className="detail-value">{formatValue(selectedRow[key])}</strong>
-                </div>
-              ))}
+            <div className="modal-body">
+              {Object.keys(selectedRow).map(key => {
+                // Don't show id if it exists
+                if (key === 'id') return null;
+                return (
+                  <div key={key} className="detail-row">
+                    <span className="detail-label">{key}</span>
+                    <strong className="detail-value">{formatValue(selectedRow[key])}</strong>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
