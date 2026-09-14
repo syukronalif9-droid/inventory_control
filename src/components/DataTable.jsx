@@ -42,6 +42,7 @@ export default function DataTable({ data }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState(null);
   const [hoveredCol, setHoveredCol] = useState(null);
+  const [selectedRow, setSelectedRow] = useState(null);
   const rowsPerPage = 50;
 
   const columns = useMemo(() => {
@@ -163,7 +164,12 @@ export default function DataTable({ data }) {
           <tbody>
             {currentData.length > 0 ? (
               currentData.map((row, idx) => (
-                <tr key={idx}>
+                <tr 
+                  key={idx}
+                  onDoubleClick={() => setSelectedRow(row)}
+                  style={{ cursor: 'pointer' }}
+                  className="table-row-hover"
+                >
                   {columns.map(col => {
                     let content = formatValue(row[col]);
                     let cellStyle = { whiteSpace: 'nowrap', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' };
@@ -246,6 +252,66 @@ export default function DataTable({ data }) {
           >
             <ChevronRight size={20} />
           </button>
+        </div>
+      )}
+
+      {/* Modal Detail Row */}
+      {selectedRow && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 1000, padding: '1rem'
+        }} onClick={() => setSelectedRow(null)}>
+          <div style={{
+            backgroundColor: '#ffffff',
+            borderRadius: '8px',
+            width: '100%',
+            maxWidth: '1200px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            padding: '2rem',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              borderBottom: '1px solid #e5e7eb', paddingBottom: '1rem', marginBottom: '1.5rem'
+            }}>
+              <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 'bold', color: '#1e293b' }}>
+                Detail TMR: {selectedRow['TMR Number'] || '-'}
+              </h3>
+              <button 
+                onClick={() => setSelectedRow(null)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem' }}
+              >
+                <X size={24} style={{ color: '#64748b' }} />
+              </button>
+            </div>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+              gap: '1rem'
+            }}>
+              {Object.keys(selectedRow).filter(key => key !== 'id').map(key => (
+                <div key={key} style={{
+                  backgroundColor: '#f8fafc',
+                  border: '1px solid #f1f5f9',
+                  borderRadius: '8px',
+                  padding: '1rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.5rem'
+                }}>
+                  <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: '#94a3b8', fontWeight: 600 }}>
+                    {key}
+                  </span>
+                  <span style={{ fontSize: '0.95rem', color: '#1e293b', fontWeight: 500, wordBreak: 'break-word' }}>
+                    {formatValue(selectedRow[key])}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>
