@@ -1,6 +1,42 @@
 import React, { useState, useMemo } from 'react';
 import { Search, ChevronLeft, ChevronRight, ArrowUpDown, ArrowUp, ArrowDown, X, Database } from 'lucide-react';
 
+const formatValue = (value) => {
+  if (value === null || value === undefined || value === '') return '-';
+  const strValue = String(value).trim();
+  
+  const dateRegex = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
+  const isoRegex = /^(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})$/;
+  
+  let day, month, year;
+  const matchDate = strValue.match(dateRegex);
+  if (matchDate) {
+    day = parseInt(matchDate[1], 10);
+    month = parseInt(matchDate[2], 10);
+    year = parseInt(matchDate[3], 10);
+    
+    if (month > 12 && day <= 12) {
+      let temp = day;
+      day = month;
+      month = temp;
+    }
+  } else {
+    const matchIso = strValue.match(isoRegex);
+    if (matchIso) {
+      year = parseInt(matchIso[1], 10);
+      month = parseInt(matchIso[2], 10);
+      day = parseInt(matchIso[3], 10);
+    }
+  }
+
+  if (day && month && year && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+    return `${day} ${months[month - 1]} ${year}`;
+  }
+  
+  return strValue;
+};
+
 export default function DataTable({ data }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -129,8 +165,7 @@ export default function DataTable({ data }) {
               currentData.map((row, idx) => (
                 <tr key={idx}>
                   {columns.map(col => {
-                    let content = row[col];
-                    if (content === null || content === undefined || content === '') content = '-';
+                    let content = formatValue(row[col]);
                     let cellStyle = { whiteSpace: 'nowrap', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' };
                     
                     if (col === 'TMR Number') {
