@@ -5,8 +5,13 @@ export default function DataTable({ data }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState(null);
-  const [selectedRow, setSelectedRow] = useState(null);
   const rowsPerPage = 50;
+
+  const columns = useMemo(() => {
+    if (!data || data.length === 0) return [];
+    const exclude = ['id', 'JUMLAH GR', 'Belum GR'];
+    return Object.keys(data[0]).filter(key => !exclude.includes(key));
+  }, [data]);
 
   const filteredData = useMemo(() => {
     let result = data;
@@ -100,62 +105,51 @@ export default function DataTable({ data }) {
         <table className="data-table">
           <thead>
             <tr>
-              <th onClick={() => requestSort('TMR Number')} style={{ cursor: 'pointer', minWidth: '110px', userSelect: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>TMR Number {renderSortIcon('TMR Number')}</div>
-              </th>
-              <th onClick={() => requestSort('Purchasing Document')} style={{ cursor: 'pointer', minWidth: '160px', userSelect: 'none', textAlign: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Purchasing Document {renderSortIcon('Purchasing Document')}</div>
-              </th>
-              <th onClick={() => requestSort('GR Date TMR')} style={{ cursor: 'pointer', minWidth: '110px', userSelect: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>GR Date {renderSortIcon('GR Date TMR')}</div>
-              </th>
-              <th onClick={() => requestSort('Storage Location')} style={{ cursor: 'pointer', userSelect: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Storage Location {renderSortIcon('Storage Location')}</div>
-              </th>
-              <th onClick={() => requestSort('Matl. Group')} style={{ cursor: 'pointer', userSelect: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Matl. Group {renderSortIcon('Matl. Group')}</div>
-              </th>
-              <th onClick={() => requestSort('Status Keterangan GR')} style={{ cursor: 'pointer', userSelect: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Status Keterangan GR {renderSortIcon('Status Keterangan GR')}</div>
-              </th>
+              {columns.map(col => (
+                <th key={col} onClick={() => requestSort(col)} style={{ cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>{col} {renderSortIcon(col)}</div>
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody>
             {currentData.length > 0 ? (
               currentData.map((row, idx) => (
-                <tr key={idx} onDoubleClick={() => setSelectedRow(row)} style={{ cursor: 'pointer' }}>
-                  <td style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{row['TMR Number'] || '-'}</td>
-                  <td style={{ fontFamily: 'monospace', color: 'var(--text-secondary)', textAlign: 'center' }}>{row['Purchasing Document'] || '-'}</td>
-                  <td style={{ color: 'var(--text-secondary)' }}>{row['GR Date TMR'] || '-'}</td>
-                  <td style={{ maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#000000', fontWeight: 500 }} title={row['Storage Location']}>
-                    {row['Storage Location'] || '-'}
-                  </td>
-                  <td style={{ maxWidth: '180px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: '#000000', fontWeight: 500 }} title={row['Matl. Group']}>
-                    {row['Matl. Group'] || '-'}
-                  </td>
-                  <td>
-                    {(() => {
-                      const status = String(row['Status Keterangan GR'] || '').trim();
+                <tr key={idx}>
+                  {columns.map(col => {
+                    let content = row[col];
+                    if (content === null || content === undefined || content === '') content = '-';
+                    let cellStyle = { whiteSpace: 'nowrap', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' };
+                    
+                    if (col === 'TMR Number') {
+                      cellStyle = { ...cellStyle, fontWeight: 600, color: 'var(--text-primary)' };
+                    } else if (col === 'Purchasing Document') {
+                      cellStyle = { ...cellStyle, fontFamily: 'monospace', color: 'var(--text-secondary)', textAlign: 'center' };
+                    } else if (col === 'Status Keterangan GR') {
+                      const status = String(row[col] || '').trim();
                       const isDone = status.toUpperCase() === 'SUDAH GR';
-
-                      return (
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            padding: '0.28rem 0.6rem',
-                            borderRadius: '999px',
-                            fontWeight: 700,
-                            background: isDone ? '#d1fae5' : '#fee2e2',
-                            color: isDone ? '#166534' : '#991b1b',
-                            border: `1px solid ${isDone ? '#86efac' : '#fca5a5'}`,
-                            textTransform: 'uppercase'
-                          }}
-                        >
+                      content = (
+                        <span style={{
+                          display: 'inline-block', padding: '0.28rem 0.6rem', borderRadius: '999px',
+                          fontWeight: 700, background: isDone ? '#d1fae5' : '#fee2e2',
+                          color: isDone ? '#166534' : '#991b1b', border: `1px solid ${isDone ? '#86efac' : '#fca5a5'}`,
+                          textTransform: 'uppercase'
+                        }}>
                           {status || '-'}
                         </span>
                       );
-                    })()}
-                  </td>
+                    } else if (col === 'Storage Location' || col === 'Matl. Group') {
+                      cellStyle = { ...cellStyle, color: '#000000', fontWeight: 500 };
+                    } else {
+                       cellStyle = { ...cellStyle, color: 'var(--text-secondary)' };
+                    }
+
+                    return (
+                      <td key={col} style={cellStyle} title={String(row[col] || '')}>
+                        {content}
+                      </td>
+                    );
+                  })}
                 </tr>
               ))
             ) : (
@@ -195,59 +189,6 @@ export default function DataTable({ data }) {
           >
             <ChevronRight size={20} />
           </button>
-        </div>
-      )}
-
-      {selectedRow && (
-        <div style={{
-          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
-          backgroundColor: 'var(--blue-light)',
-          display: 'flex', justifyContent: 'center', alignItems: 'center',
-          zIndex: 1000, padding: '1rem', backdropFilter: 'blur(4px)'
-        }}>
-          <div className="glass-card" style={{
-            width: '95%', maxWidth: '1400px', maxHeight: '90vh',
-            overflowY: 'auto', overflowX: 'hidden', position: 'relative',
-            background: 'var(--bg-card)', border: '1px solid var(--border-light)',
-            boxShadow: '0 25px 50px -12px var(--blue-light)'
-          }}>
-            <button 
-              onClick={() => setSelectedRow(null)}
-              style={{
-                position: 'absolute', top: '1rem', right: '1rem',
-                background: 'transparent', border: 'none', color: 'var(--text-secondary)',
-                cursor: 'pointer', padding: '0.5rem', borderRadius: '50%',
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
-              }}
-              onMouseOver={(e) => e.currentTarget.style.background = 'var(--bg-card-hover)'}
-              onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
-            >
-              <X size={24} />
-            </button>
-
-            <h2 style={{ marginBottom: '1.5rem', color: '#000000', borderBottom: '1px solid var(--border-light)', paddingBottom: '1rem' }}>
-              Detail TMR: <span style={{ color: '#000000' }}>{selectedRow['TMR Number'] || 'N/A'}</span>
-            </h2>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
-              {Object.entries(selectedRow).map(([key, value]) => {
-                if (key === 'id' || key === 'JUMLAH GR' || key === 'Belum GR') return null; // skip hidden fields
-                return (
-                  <div key={key} style={{
-                    background: 'var(--bg-dark)', padding: '1rem', borderRadius: '8px',
-                    border: '1px solid var(--border-light)'
-                  }}>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
-                      {key}
-                    </div>
-                    <div style={{ fontSize: '1rem', color: 'var(--text-primary)', fontWeight: 500, wordBreak: 'break-word' }}>
-                      {value !== null && value !== '' && value !== undefined ? value : '-'}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
         </div>
       )}
     </div>
