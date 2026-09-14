@@ -5,6 +5,7 @@ export default function DataTable({ data }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState(null);
+  const [hoveredCol, setHoveredCol] = useState(null);
   const rowsPerPage = 50;
 
   const columns = useMemo(() => {
@@ -106,7 +107,18 @@ export default function DataTable({ data }) {
           <thead>
             <tr>
               {columns.map(col => (
-                <th key={col} onClick={() => requestSort(col)} style={{ cursor: 'pointer', whiteSpace: 'nowrap', userSelect: 'none' }}>
+                <th 
+                  key={col} 
+                  onClick={() => requestSort(col)} 
+                  onMouseEnter={() => setHoveredCol(col)}
+                  onMouseLeave={() => setHoveredCol(null)}
+                  style={{ 
+                    cursor: 'pointer', 
+                    whiteSpace: 'nowrap', 
+                    userSelect: 'none',
+                    backgroundColor: hoveredCol === col ? 'var(--yellow)' : undefined
+                  }}
+                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>{col} {renderSortIcon(col)}</div>
                 </th>
               ))}
@@ -144,8 +156,18 @@ export default function DataTable({ data }) {
                        cellStyle = { ...cellStyle, color: 'var(--text-secondary)' };
                     }
 
+                    if (hoveredCol === col) {
+                      cellStyle.backgroundColor = 'var(--yellow)';
+                    }
+
                     return (
-                      <td key={col} style={cellStyle} title={String(row[col] || '')}>
+                      <td 
+                        key={col} 
+                        style={cellStyle} 
+                        title={String(row[col] || '')}
+                        onMouseEnter={() => setHoveredCol(col)}
+                        onMouseLeave={() => setHoveredCol(null)}
+                      >
                         {content}
                       </td>
                     );
