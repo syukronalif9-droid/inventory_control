@@ -61,7 +61,8 @@ export function parseAnyDate(val) {
   };
 
   const textParts = str.replace(/,/g, ' ').trim().split(/[\s/.-]+/);
-  if (textParts.length === 3) {
+  // Only attempt textual parsing if there is actually text (a letter)
+  if (textParts.length === 3 && /[a-zA-Z]/.test(str)) {
     let day = null, month = null, year = null;
     textParts.forEach((part) => {
       const lower = part.toLowerCase();
