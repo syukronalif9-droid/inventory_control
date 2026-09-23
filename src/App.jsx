@@ -352,20 +352,20 @@ function App() {
         });
         const uniqueData = Array.from(deduplicatedDataMap.values());
 
-        // 1. Temukan dan hapus data lama berdasarkan kombinasi 3 kolom: Purchasing Document, Shipping Date, dan Item
-        const datesInFile = [...new Set(uniqueData.map(row => row.shipping_date).filter(Boolean))];
+        // 1. Temukan dan hapus data lama berdasarkan kombinasi: Purchasing Document dan Item
+        const posInFile = [...new Set(uniqueData.map(row => row.purchasing_document).filter(Boolean))];
         let idsToDelete = [];
 
-        if (datesInFile.length > 0) {
-          // Ambil data lama berdasarkan shipping_date yang ada di file baru (meminimalisir query ke database)
-          const dateChunkSize = 50;
+        if (posInFile.length > 0) {
+          // Ambil data lama berdasarkan purchasing_document yang ada di file baru
+          const poChunkSize = 100;
           let existingRecords = [];
-          for (let i = 0; i < datesInFile.length; i += dateChunkSize) {
-            const dateChunk = datesInFile.slice(i, i + dateChunkSize);
+          for (let i = 0; i < posInFile.length; i += poChunkSize) {
+            const poChunk = posInFile.slice(i, i + poChunkSize);
             const { data: records, error: fetchError } = await supabase
               .from('inventory_records')
-              .select('id, item, shipping_date, purchasing_document')
-              .in('shipping_date', dateChunk);
+              .select('id, item, purchasing_document')
+              .in('purchasing_document', poChunk);
 
             if (fetchError) {
               console.error('Fetch existing data error', fetchError);
@@ -379,12 +379,11 @@ function App() {
             }
           }
 
-          // Helper untuk membuat kunci komposit
+          // Helper untuk membuat kunci komposit (Hanya PO dan Item)
           const getCompositeKey = (row) => {
             const purcDoc = String(row.purchasing_document || '').trim();
-            const shipDate = String(row.shipping_date || '').trim();
             const item = String(row.item || '').trim();
-            return `${purcDoc}|${shipDate}|${item}`;
+            return `${purcDoc}|${item}`;
           };
 
           // Buat Set berisi kunci dari data baru yang di-upload
