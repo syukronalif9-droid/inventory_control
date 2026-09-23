@@ -11,14 +11,16 @@ const formatValue = (value) => {
   let day, month, year;
   const matchDate = strValue.match(dateRegex);
   if (matchDate) {
-    day = parseInt(matchDate[1], 10);
-    month = parseInt(matchDate[2], 10);
+    // Supabase returns MM/DD/YYYY based on formatToDDMMYYYY in dateUtils
+    month = parseInt(matchDate[1], 10);
+    day = parseInt(matchDate[2], 10);
     year = parseInt(matchDate[3], 10);
     
+    // If somehow it's DD/MM/YYYY (where month > 12), swap them back
     if (month > 12 && day <= 12) {
-      let temp = day;
-      day = month;
-      month = temp;
+      let temp = month;
+      month = day;
+      day = temp;
     }
   } else {
     const matchIso = strValue.match(isoRegex);
