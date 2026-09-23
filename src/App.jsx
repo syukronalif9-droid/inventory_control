@@ -143,6 +143,11 @@ function App() {
   const [statusGrFilter, setStatusGrFilter] = useState('');
   const [destinationFilter, setDestinationFilter] = useState('');
 
+  const [showResetModal, setShowResetModal] = useState(false);
+  const [resetOption, setResetOption] = useState('all');
+  const [resetStartDate, setResetStartDate] = useState('');
+  const [resetEndDate, setResetEndDate] = useState('');
+
   const [lastFetched, setLastFetched] = useState(null);
 
   const fetchFromSupabase = async () => {
@@ -484,22 +489,77 @@ function App() {
     writeFile(wb, `TMR_Dashboard_Export_${dateStr}.xlsx`);
   };
 
-  const handleResetData = async () => {
-    if (!window.confirm("AWAS: Apakah Anda yakin ingin menghapus SELURUH data dari database? Tindakan ini tidak bisa dibatalkan!")) {
-      return;
-    }
+  const openResetModal = () => {
+    setShowResetModal(true);
+    setResetOption('all');
+    setResetStartDate('');
+    setResetEndDate('');
+  };
 
-    setLoading(true);
-    try {
-      const { error } = await supabase.from('inventory_records').delete().neq('id', -1);
-      if (error) throw error;
+  const handleConfirmReset = async () => {
+    if (resetOption === 'all') {
+      if (!window.confirm("AWAS: Apakah Anda yakin ingin menghapus SELURUH data dari database? Tindakan ini tidak bisa dibatalkan!")) {
+        return;
+      }
+      setLoading(true);
+      try {
+        const { error } = await supabase.from('inventory_records').delete().neq('id', -1);
+        if (error) throw error;
 
-      alert("Seluruh data berhasil dihapus!");
-      window.location.reload();
-    } catch (err) {
-      console.error(err);
-      alert("Gagal menghapus data: " + err.message);
-      setLoading(false);
+        alert("Seluruh data berhasil dihapus!");
+        window.location.reload();
+      } catch (err) {
+        console.error(err);
+        alert("Gagal menghapus data: " + err.message);
+        setLoading(false);
+      }
+    } else if (resetOption === 'date') {
+      if (!resetStartDate || !resetEndDate) {
+        alert("Pilih tanggal awal dan akhir terlebih dahulu!");
+        return;
+      }
+      if (!window.confirm(`Menghapus data pengiriman dari tanggal ${resetStartDate} s/d ${resetEndDate}?`)) {
+        return;
+      }
+      setLoading(true);
+      try {
+        const { data: allRecords, error: fetchErr } = await supabase.from('inventory_records').select('id, shipping_date');
+        if (fetchErr) throw fetchErr;
+        
+        const start = new Date(resetStartDate);
+        start.setHours(0,0,0,0);
+        const end = new Date(resetEndDate);
+        end.setHours(23,59,59,999);
+        
+        const idsToDelete = allRecords.filter(r => {
+          if (!r.shipping_date || r.shipping_date === '-') return false;
+          // Format dari database adalah MM/DD/YYYY
+          const [m, d, y] = r.shipping_date.split('/');
+          const dt = new Date(y, m - 1, d);
+          return dt >= start && dt <= end;
+        }).map(r => r.id);
+
+        if (idsToDelete.length === 0) {
+          alert("Tidak ada data yang cocok dengan rentang tanggal tersebut.");
+          setLoading(false);
+          setShowResetModal(false);
+          return;
+        }
+
+        const delChunkSize = 500;
+        for (let i = 0; i < idsToDelete.length; i += delChunkSize) {
+          const chunk = idsToDelete.slice(i, i + delChunkSize);
+          const { error: delErr } = await supabase.from('inventory_records').delete().in('id', chunk);
+          if (delErr) throw delErr;
+        }
+
+        alert(`${idsToDelete.length} data berhasil dihapus!`);
+        window.location.reload();
+      } catch (err) {
+        console.error(err);
+        alert("Gagal menghapus data: " + err.message);
+        setLoading(false);
+      }
     }
   };
 
@@ -856,7 +916,7 @@ function App() {
 
                 <button
                   className="btn btn-reset"
-                  onClick={handleResetData}
+                  onClick={openResetModal}
                   title="Hapus Semua Data"
                 >
                   <Trash2 size={16} />
@@ -980,6 +1040,121 @@ function App() {
             </ul>
           </section>
         </main>
+      )}
+
+      {/* Reset Modal */}
+      {showResetModal && (
+        <div style={{
+          position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          zIndex: 9999, padding: '1rem'
+        }}>
+          <div style={{
+            backgroundColor: '#ffffff',
+            borderRadius: '12px',
+            width: '100%',
+            maxWidth: '500px',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+            overflow: 'hidden',
+            fontFamily: 'Inter, sans-serif'
+          }}>
+            <div style={{ padding: '1.5rem', borderBottom: '1px solid #e5e7eb', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>HAPUS DATA</span>
+                <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#1e293b' }}>Summary</h3>
+              </div>
+              <button 
+                onClick={() => setShowResetModal(false)}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '0.25rem', color: '#94a3b8' }}
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div style={{ padding: '1.5rem' }}>
+              <div 
+                style={{ 
+                  display: 'flex', alignItems: 'center', gap: '0.75rem', 
+                  padding: '1rem', border: '1px solid ' + (resetOption === 'all' ? '#3b82f6' : '#e5e7eb'), 
+                  borderRadius: '8px', marginBottom: '1rem', cursor: 'pointer',
+                  backgroundColor: resetOption === 'all' ? '#ffffff' : '#ffffff'
+                }}
+                onClick={() => setResetOption('all')}
+              >
+                <input 
+                  type="radio" 
+                  name="resetOption" 
+                  checked={resetOption === 'all'} 
+                  onChange={() => setResetOption('all')} 
+                  style={{ width: '16px', height: '16px', accentColor: '#3b82f6', cursor: 'pointer' }}
+                />
+                <label style={{ fontSize: '0.95rem', fontWeight: 600, color: '#334155', cursor: 'pointer', flex: 1 }}>Hapus Semua Data</label>
+              </div>
+
+              <div 
+                style={{ 
+                  display: 'flex', alignItems: 'center', gap: '0.75rem', 
+                  padding: '1rem', border: '1px solid ' + (resetOption === 'date' ? '#3b82f6' : '#e5e7eb'), 
+                  borderRadius: '8px', cursor: 'pointer',
+                  backgroundColor: resetOption === 'date' ? '#ffffff' : '#ffffff'
+                }}
+                onClick={() => setResetOption('date')}
+              >
+                <input 
+                  type="radio" 
+                  name="resetOption" 
+                  checked={resetOption === 'date'} 
+                  onChange={() => setResetOption('date')} 
+                  style={{ width: '16px', height: '16px', accentColor: '#3b82f6', cursor: 'pointer' }}
+                />
+                <label style={{ fontSize: '0.95rem', fontWeight: 600, color: '#334155', cursor: 'pointer', flex: 1 }}>Hapus Berdasarkan Tanggal</label>
+              </div>
+
+              {resetOption === 'date' && (
+                <div style={{ marginTop: '1rem', padding: '1.25rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px dashed #cbd5e1', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  <div style={{ flex: 1, minWidth: '150px' }}>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Dari Tanggal (Shipping Date)</label>
+                    <input 
+                      type="date" 
+                      value={resetStartDate} 
+                      onChange={e => setResetStartDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none', fontFamily: 'inherit' }}
+                    />
+                  </div>
+                  <div style={{ flex: 1, minWidth: '150px' }}>
+                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Sampai Tanggal</label>
+                    <input 
+                      type="date" 
+                      value={resetEndDate} 
+                      onChange={e => setResetEndDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', border: '1px solid #cbd5e1', outline: 'none', fontFamily: 'inherit' }}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div style={{ padding: '1.25rem 1.5rem', borderTop: '1px solid #e5e7eb', display: 'flex', gap: '1rem', backgroundColor: '#ffffff' }}>
+              <button 
+                onClick={() => setShowResetModal(false)}
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '6px', border: '1px solid #e2e8f0', backgroundColor: '#ffffff', color: '#64748b', fontWeight: 600, cursor: 'pointer', transition: 'background-color 0.2s' }}
+                onMouseEnter={e => e.target.style.backgroundColor = '#f1f5f9'}
+                onMouseLeave={e => e.target.style.backgroundColor = '#ffffff'}
+              >
+                Batal
+              </button>
+              <button 
+                onClick={handleConfirmReset}
+                style={{ flex: 1, padding: '0.75rem', borderRadius: '6px', border: 'none', backgroundColor: '#ef4444', color: '#ffffff', fontWeight: 600, cursor: 'pointer', transition: 'background-color 0.2s' }}
+                onMouseEnter={e => e.target.style.backgroundColor = '#dc2626'}
+                onMouseLeave={e => e.target.style.backgroundColor = '#ef4444'}
+              >
+                Hapus
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
