@@ -337,8 +337,23 @@ function App() {
           return cleanedRow;
         });
 
+        // DEDUPLIKASI: Ambil 1 PO & Item terakhir saja (paling update di excel)
+        const deduplicatedDataMap = new Map();
+        cleanedData.forEach(row => {
+          const po = String(row.purchasing_document || '').trim();
+          const item = String(row.item || '').trim();
+          
+          if (po) {
+            const key = `${po}|${item}`;
+            deduplicatedDataMap.set(key, row); // Akan menimpa data sebelumnya dengan PO & Item yang sama, menyisakan baris terakhir
+          } else {
+            deduplicatedDataMap.set(Math.random().toString(), row);
+          }
+        });
+        const uniqueData = Array.from(deduplicatedDataMap.values());
+
         // 1. Temukan dan hapus data lama berdasarkan kombinasi 3 kolom: Purchasing Document, Shipping Date, dan Item
-        const datesInFile = [...new Set(cleanedData.map(row => row.shipping_date).filter(Boolean))];
+        const datesInFile = [...new Set(uniqueData.map(row => row.shipping_date).filter(Boolean))];
         let idsToDelete = [];
 
         if (datesInFile.length > 0) {
@@ -373,7 +388,7 @@ function App() {
           };
 
           // Buat Set berisi kunci dari data baru yang di-upload
-          const newKeys = new Set(cleanedData.map(row => getCompositeKey(row)));
+          const newKeys = new Set(uniqueData.map(row => getCompositeKey(row)));
 
           // Cocokkan dengan data lama
           existingRecords.forEach(record => {
@@ -406,8 +421,8 @@ function App() {
 
         // 2. Insert new data
         const chunkSize = 500;
-        for (let i = 0; i < cleanedData.length; i += chunkSize) {
-          const chunk = cleanedData.slice(i, i + chunkSize);
+        for (let i = 0; i < uniqueData.length; i += chunkSize) {
+          const chunk = uniqueData.slice(i, i + chunkSize);
           const { error: insertError } = await supabase.from('inventory_records').insert(chunk);
           if (insertError) {
             console.error('Insert error chunk', i, insertError);
