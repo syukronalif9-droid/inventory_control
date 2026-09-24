@@ -294,7 +294,7 @@ export default function DataTable({ data }) {
               gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
               gap: '1rem'
             }}>
-              {Object.keys(selectedRow).filter(key => key !== 'id').map(key => (
+              {Object.keys(selectedRow).filter(key => key !== 'id' && key !== 'JUMLAH GR' && key !== 'Belum GR').map(key => (
                 <div key={key} style={{
                   backgroundColor: '#f8fafc',
                   border: '1px solid #f1f5f9',
