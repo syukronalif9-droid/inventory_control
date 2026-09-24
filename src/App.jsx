@@ -773,19 +773,7 @@ function App() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <h1 className="app-title" style={{ marginBottom: 0 }}>TMR Monitoring Dashboard</h1>
             
-            {lastFetched && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'var(--bg-card)', padding: '0.4rem 0.8rem', border: '2px solid var(--border)', boxShadow: '2px 2px 0 var(--border)', fontSize: '0.75rem', fontWeight: 700 }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Update:</span>
-                <span style={{ color: 'var(--text-primary)' }}>{lastFetched.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</span>
-                <button 
-                  onClick={fetchFromSupabase}
-                  title="Muat Ulang Data"
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--gold)', display: 'flex', alignItems: 'center', padding: 0, marginLeft: '0.2rem' }}
-                >
-                  <RefreshCw size={14} />
-                </button>
-              </div>
-            )}
+
 
             <button 
               className="btn btn-outline" 
