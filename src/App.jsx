@@ -947,37 +947,37 @@ function App() {
               <div className="insight-grid">
                 <div className="insight-tile">
                   <span className="insight-label">Total<br />line Inventory & Expense</span>
-                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)' }}>{dashboardInsights.total}</strong>
+                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)', color: '#1e293b' }}>{dashboardInsights.total}</strong>
                 </div>
                 <div className="insight-tile">
                   <span className="insight-label">Total<br />line Inventory</span>
-                  <strong className="insight-status-value" style={{ background: 'var(--mint)', borderColor: 'var(--border-accent)' }}>{dashboardInsights.totalInventory}</strong>
+                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)', color: '#1e293b' }}>{dashboardInsights.totalInventory}</strong>
                 </div>
                 <div className="insight-tile">
                   <span className="insight-label">Total<br />line Expense (OB)</span>
-                  <strong className="insight-status-value" style={{ background: 'var(--peach)', borderColor: 'var(--border)' }}>{dashboardInsights.totalExpense}</strong>
+                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)', color: '#1e293b' }}>{dashboardInsights.totalExpense}</strong>
                 </div>
 
                 <div className="insight-tile">
                   <span className="insight-category">Inventory</span>
                   <span className="insight-label">QTY TMR Sudah GR</span>
-                  <strong className="insight-status-value sudah-gr">{dashboardInsights.totalQtyInventorySudahGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)', color: '#1e293b' }}>{dashboardInsights.totalQtyInventorySudahGr.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile">
                   <span className="insight-category">Inventory</span>
                   <span className="insight-label">QTY TMR Belum GR</span>
-                  <strong className="insight-status-value belum-gr">{dashboardInsights.totalQtyInventoryBelumGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)', color: '#1e293b' }}>{dashboardInsights.totalQtyInventoryBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
 
                 <div className="insight-tile">
                   <span className="insight-category">Expense (OB)</span>
                   <span className="insight-label">QTY TMR Sudah GR</span>
-                  <strong className="insight-status-value sudah-gr">{dashboardInsights.totalQtyExpenseSudahGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)', color: '#1e293b' }}>{dashboardInsights.totalQtyExpenseSudahGr.toLocaleString('id-ID')}</strong>
                 </div>
                 <div className="insight-tile">
                   <span className="insight-category">Expense (OB)</span>
                   <span className="insight-label">QTY TMR Belum GR</span>
-                  <strong className="insight-status-value belum-gr">{dashboardInsights.totalQtyExpenseBelumGr.toLocaleString('id-ID')}</strong>
+                  <strong className="insight-status-value" style={{ background: 'var(--bg-inset)', borderColor: 'var(--border)', color: '#1e293b' }}>{dashboardInsights.totalQtyExpenseBelumGr.toLocaleString('id-ID')}</strong>
                 </div>
               </div>
             </section>
