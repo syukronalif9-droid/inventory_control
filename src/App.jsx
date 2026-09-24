@@ -482,6 +482,26 @@ function App() {
     }
     
     const ws = utils.json_to_sheet(filteredData);
+    
+    // Calculate column widths
+    const colWidths = [];
+    const keys = Object.keys(filteredData[0] || {});
+    
+    keys.forEach((key, i) => {
+      let maxLen = key.length;
+      filteredData.forEach(row => {
+        const val = row[key];
+        if (val !== null && val !== undefined) {
+          const valLen = String(val).length;
+          if (valLen > maxLen) maxLen = valLen;
+        }
+      });
+      // Add a little padding
+      colWidths[i] = { wch: maxLen + 2 };
+    });
+    
+    ws['!cols'] = colWidths;
+    
     const wb = utils.book_new();
     utils.book_append_sheet(wb, ws, "Data TMR");
     
