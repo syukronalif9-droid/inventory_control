@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Calendar, X, UploadCloud, DownloadCloud, Trash2, Plus, LogOut, RefreshCw } from 'lucide-react';
-import { read, utils, writeFile } from 'xlsx';
+import { read, utils, writeFile } from 'xlsx-js-style';
 import { supabase } from './supabaseClient';
 
 import SummaryCards from './components/SummaryCards';
@@ -482,6 +482,37 @@ function App() {
     }
     
     const ws = utils.json_to_sheet(filteredData);
+    
+    const borderStyle = {
+      top: { style: "thin", color: { auto: 1 } },
+      bottom: { style: "thin", color: { auto: 1 } },
+      left: { style: "thin", color: { auto: 1 } },
+      right: { style: "thin", color: { auto: 1 } }
+    };
+
+    const headerStyle = {
+      font: { bold: true },
+      alignment: { horizontal: "left", vertical: "center" },
+      border: borderStyle
+    };
+    
+    const cellStyle = {
+      alignment: { horizontal: "left", vertical: "center" },
+      border: borderStyle
+    };
+
+    // Apply styles to all cells
+    const range = utils.decode_range(ws['!ref']);
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellRef = utils.encode_cell({ r: R, c: C });
+        if (!ws[cellRef]) ws[cellRef] = { t: 's', v: '' }; // Create empty cell if undefined
+        ws[cellRef].s = R === 0 ? headerStyle : cellStyle;
+      }
+    }
+
+    // Add autofilter (table header dropdowns)
+    ws['!autofilter'] = { ref: ws['!ref'] };
     
     // Calculate column widths
     const colWidths = [];
